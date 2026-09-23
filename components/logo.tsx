@@ -1,18 +1,4 @@
 import { cn } from "@/components/utils";
-
-export function Logo({ className }: { className?: string }) {
-  return (
-    <a href="#top" className={cn("group inline-flex items-center gap-3", className)} aria-label="ScrollSprint Creative home">
-      <span className="relative grid size-9 place-items-center overflow-hidden rounded-[10px] border border-black/10 bg-[#dfff3f] shadow-[0_8px_30px_rgba(223,255,63,.18)]">
-        <svg viewBox="0 0 36 36" className="size-7" aria-hidden="true">
-          <path d="M7 9.5h19.5L16.2 17H7z" fill="currentColor" />
-          <path d="M29 26.5H9.5L19.8 19H29z" fill="currentColor" />
-          <path d="M25.8 9.5 15.2 26.5h-5L20.8 9.5z" fill="currentColor" opacity=".18" />
-        </svg>
-      </span>
-      <span className="font-semibold tracking-[-0.03em] text-[15px] leading-none">
-        ScrollSprint<span className="font-normal text-black/45"> Creative</span>
-      </span>
-    </a>
-  );
+export function Logo({className}:{className?:string}) {
+ return <a href="#top" className={cn("brand",className)} aria-label="ScrollSprint Creative home"><svg viewBox="0 0 44 44" width="40" height="40" fill="none" aria-hidden="true"><path d="M33 5H16C8 5 4 11 7 17c2 5 9 7 16 9l6 2c4 2 2 6-2 6H10l-5 6h22c12 0 17-14 6-20l-16-6c-3-1-3-4 1-4h11Z" fill="currentColor"/><path d="m31 3 9 8-12 5 4-6Z" fill="#F16A43"/></svg><span>ScrollSprint<span className="brand-sub">CREATIVE STUDIO</span></span></a>;
 }

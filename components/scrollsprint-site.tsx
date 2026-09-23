@@ -1,275 +1,145 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
-import {
-  ArrowDown,
-  ArrowRight,
-  ArrowUpRight,
-  Check,
-  ChevronDown,
-  Clapperboard,
-  Copy,
-  Gauge,
-  Layers3,
-  Menu,
-  MoveUpRight,
-  Sparkles,
-  X,
-  Zap,
-} from "lucide-react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { ArrowUpRight, ArrowRight, ArrowDown, Check, ChevronDown, X, Menu, Plus, Copy, Download, Film, AudioLines, MousePointer2, Scissors, CheckCheck } from "lucide-react";
 import { Logo } from "@/components/logo";
-import { Reveal } from "@/components/reveal";
 
-const portfolio = [
-  { name: "PrePaw", title: "The Hair Has to Go Somewhere", type: "Pet grooming", idea: "Mess → capture → clean result", tone: "01" },
-  { name: "Automotive", title: "One Panel. One Pass.", type: "Detailing", idea: "Application → transformation", tone: "02" },
-  { name: "Dēpology", title: "Your Skincare Routine Has a Night Shift", type: "Skincare", idea: "Routine → product → payoff", tone: "03" },
-  { name: "Furbo", title: "The 2:17 PM Check-in", type: "Pet tech", idea: "Notification → reassurance → day", tone: "04" },
-  { name: "ZeoFill", title: "Looks Clean. Smells Clean?", type: "Home / pet", idea: "Invisible problem → application", tone: "05" },
-  { name: "Hyperice", title: "The Workout Ends. The Routine Doesn’t.", type: "Recovery", idea: "Use-case → interaction → lifestyle", tone: "06" },
+const concepts = [
+  { brand: "PrePaw", title: "The hair has to go somewhere.", category: "Product demo", color: "sage", image: "pet-care", hook: "What if grooming day ended with less cleanup?", angle: "The everyday mess", frames: ["Open on the grooming mess people recognize.", "Show the product capturing loose hair during use.", "Close on the clean result and one direct next step."], format: "20–30 seconds · 9:16" },
+  { brand: "Automotive detailing", title: "One panel. One pass.", category: "Product demo", color: "blue", image: "auto-care", hook: "Give one panel the attention it deserves.", angle: "Show the transformation", frames: ["Start close on the surface and its visible condition.", "Follow one deliberate product application.", "Reveal the same panel in the same light."], format: "15–25 seconds · 9:16" },
+  { brand: "Dēpology", title: "Your routine has a night shift.", category: "Lifestyle", color: "rose", image: "skincare", hook: "The last step before you switch off.", angle: "A familiar ritual", frames: ["Set the scene with an evening skincare ritual.", "Bring the product, texture and application into focus.", "Finish with a simple routine-led call to action."], format: "20–30 seconds · 9:16" },
+  { brand: "Furbo", title: "The 2:17 PM check-in.", category: "Story-led", color: "sand", image: "pet-tech", hook: "A little reassurance in the middle of your day.", angle: "An everyday moment", frames: ["Open with a pet owner checking in during their day.", "Demonstrate the approved camera interaction.", "Return to the person, reassured and ready to carry on."], format: "20–30 seconds · 9:16" },
+  { brand: "ZeoFill", title: "Looks clean. Smells clean?", category: "Product demo", color: "sage", image: "home-care", hook: "Some outdoor messes are harder to see.", angle: "An overlooked problem", frames: ["Introduce the outdoor pet area and the problem.", "Show the product application clearly.", "Explain its intended use with brand-approved claims."], format: "20–30 seconds · 9:16" },
+  { brand: "Hyperice", title: "The routine doesn’t end here.", category: "Lifestyle", color: "lavender", image: "recovery", hook: "Your post-workout routine deserves a moment too.", angle: "Beyond the workout", frames: ["Start at the end of a recognizable workout.", "Focus on the product and how it is used.", "Make recovery part of the closing routine."], format: "20–30 seconds · 9:16" },
+];
+type Concept = typeof concepts[number];
+const packages = [
+  { name: "Starter Test", price: "$397", intro: "Find your first direction.", ads: "2", hooks: "3", items: ["One product, one core angle", "9:16 vertical delivery", "Captions + sound design", "One revision round"] },
+  { name: "Creative Sprint", price: "$897", intro: "Give your next test more to work with.", ads: "5", hooks: "10", items: ["Two creative angles", "Voiceover, captions + sound", "Testing-ready variations", "One revision round", "72-hour target after brief approval"], featured: true },
+  { name: "Scale Pack", price: "$1,497", intro: "Keep your creative queue moving.", ads: "10", hooks: "20", items: ["Three creative angles", "UGC-style + product concepts", "Multiple calls to action", "Testing recommendations", "Priority production"] },
+];
+const questions = [
+  ["What do you need to get started?", "Your product link, approved product photos or footage, brand guidelines, and any existing ads or learnings. We agree on the scope and creative direction before production."],
+  ["Do we need to ship a product?", "Not always. We often work with approved product imagery, existing footage and generated production. We will flag any concept requiring a physical shoot before you commit."],
+  ["How does the 72-hour turnaround work?", "It is a production target for the Creative Sprint package, starting after the brief is approved and all required assets are received. We confirm the delivery date before production. Revisions and complex requests may need additional time."],
+  ["Are these concepts commissioned client work?", "These are self-initiated concept campaigns. The illustrations show the creative direction while the videos are in production. They do not imply a client relationship or endorsement."],
+  ["Do you run the ads or guarantee results?", "Our packages cover creative production. Your team handles media buying. Results depend on your offer, audience, landing page and campaign execution. We do not guarantee ROAS, CPA or revenue."],
+  ["What do we receive?", "Finished videos, the hook variations in your package, captions and sound design, plus an organized delivery for your team. The primary format is 9:16 for Meta, TikTok and YouTube Shorts. Additional formats are scoped separately."],
 ];
 
-const pricing = [
-  {
-    name: "Starter Test",
-    price: "$397",
-    description: "A low-risk first test for one product and one core angle.",
-    items: ["2 finished ads", "3 hook variations", "1 core angle", "9:16 delivery", "Captions + sound", "1 revision round"],
-  },
-  {
-    name: "Creative Sprint",
-    price: "$897",
-    description: "The core offer: enough finished creative to actually learn something.",
-    items: ["5 finished ads", "10 hook variations", "2 creative angles", "VO + captions + sound", "Testing-ready variations", "1 revision round", "72-hour target turnaround"],
-    featured: true,
-  },
-  {
-    name: "Scale Pack",
-    price: "$1,497",
-    description: "For brands already spending consistently and hungry for more test inventory.",
-    items: ["10 finished creatives", "20 hooks / openings", "3 creative angles", "UGC + product-led concepts", "Multiple CTAs", "Testing recommendations", "Priority production"],
-  },
-];
-
-const faq = [
-  ["Do you guarantee performance?", "No. Performance depends on the offer, product, audience, media buying, landing page and other factors. We produce testing-ready creative and variations; we do not promise specific ROAS, CPA or revenue outcomes."],
-  ["Do we need to ship a product?", "Not always. Some campaigns can be built from approved product imagery, existing footage, screenshots and generated production. Physical product requirements depend on the concept."],
-  ["Are the portfolio examples client work?", "Commissioned work will be identified as client work. Self-initiated demonstrations are clearly labeled Concept Campaign or Spec Creative."],
-  ["Do you run the ads?", "The core offer is creative production. Media buying is separate unless explicitly included in a custom engagement."],
-  ["What platforms do you produce for?", "The primary format is vertical paid-social creative for Meta, TikTok and YouTube Shorts. Other formats can be included by scope."],
-];
-
-function Pill({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
-  return <span className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[.12em] ${dark ? "border-white/15 bg-white/6 text-white/70" : "border-black/12 bg-white/35 text-black/60"}`}>{children}</span>;
-}
-
-function ArrowButton({ href, children, inverse = false, small = false }: { href: string; children: React.ReactNode; inverse?: boolean; small?: boolean }) {
-  return (
-    <a href={href} className={`group inline-flex items-center justify-between gap-6 rounded-full border transition duration-300 ${small ? "px-4 py-2.5 text-sm" : "px-5 py-3.5 text-[15px]"} ${inverse ? "border-white/18 bg-white text-black hover:bg-[#dfff3f]" : "border-black/15 bg-black text-white hover:bg-[#dfff3f] hover:text-black"}`}>
-      <span className="font-semibold tracking-[-.02em]">{children}</span>
-      <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-    </a>
-  );
+function CTA({ href = "#start", children, light = false, className = "" }: { href?: string; children: React.ReactNode; light?: boolean; className?: string }) {
+  return <a href={href} className={`ss-button ${light ? "ss-button-light" : "ss-button-dark"} ${className}`}><span>{children}</span><ArrowUpRight size={17} aria-hidden="true" /></a>;
 }
 
 export function ScrollSprintSite() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [productUrl, setProductUrl] = useState("");
+  const [showAll, setShowAll] = useState(false);
+  const [selectedConcept, setSelectedConcept] = useState<Concept | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState("Creative Sprint");
+  const [product, setProduct] = useState("");
   const [goal, setGoal] = useState("");
+  const [platform, setPlatform] = useState("Meta");
+  const [briefReady, setBriefReady] = useState(false);
+  const [copyStatus, setCopyStatus] = useState("");
+  const dialog = useRef<HTMLDialogElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const result = useRef<HTMLDivElement>(null);
+  const brief = `SCROLLSPRINT CREATIVE / PROJECT BRIEF\n\nPackage: ${selectedPackage}\nProduct: ${product}\nPrimary platform: ${platform}\nGoal / offer: ${goal}\n\nApproved photos / footage: [add links]\nCurrent ads / learnings: [add links]\nClaims or visuals to avoid: [add details]\n\nPlease review this brief and confirm scope, timing and next steps.`;
 
-  const brief = useMemo(() => `SCROLLSPRINT CREATIVE SPRINT BRIEF\n\nProduct: ${productUrl || "[product URL]"}\nPrimary goal / offer: ${goal || "[what we want the creative to sell or test]"}\nCurrent ads / assets: [links]\nPriority platform: [Meta / TikTok / Shorts]\nAnything we must avoid: [claims, visuals, competitors, etc.]`, [productUrl, goal]);
-
+  useEffect(() => {
+    if (selectedConcept && !dialog.current?.open) dialog.current?.showModal();
+  }, [selectedConcept]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onKey(event: KeyboardEvent) { if (event.key === "Escape") { setMenuOpen(false); menuButton.current?.focus(); } }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
+  function choosePackage(name: string) { setSelectedPackage(name); setBriefReady(false); setCopyStatus(""); }
+  function prepareBrief(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setBriefReady(true); setCopyStatus(""); requestAnimationFrame(() => result.current?.focus()); }
   async function copyBrief() {
-    try {
-      await navigator.clipboard.writeText(brief);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    } catch {
-      setCopied(false);
-    }
+    try { await navigator.clipboard.writeText(brief); setCopyStatus("Copied. Paste it into our conversation to share your brief."); }
+    catch { setCopyStatus("Copy is unavailable here. Select the brief below or download it."); }
+  }
+  function downloadBrief() {
+    const url = URL.createObjectURL(new Blob([brief], {type:"text/plain;charset=utf-8"}));
+    const link = document.createElement("a"); link.href = url; link.download = "scrollsprint-creative-brief.txt"; link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000); setCopyStatus("Brief downloaded. Send the file through our conversation.");
   }
 
-  return (
-    <div className="noise min-h-screen overflow-x-clip">
-      <a className="skip-link" href="#main">Skip to content</a>
-      <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 md:px-7 md:pt-5">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between rounded-[14px] border border-black/10 bg-[#f4f2ea]/95 px-3 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,.08)] backdrop-blur-xl md:rounded-[18px] md:px-5 md:py-3">
-          <Logo />
-          <nav className="hidden items-center gap-7 text-sm font-medium md:flex">
-            <a href="#work" className="text-black/58 hover:text-black">Work</a>
-            <a href="#services" className="text-black/58 hover:text-black">Services</a>
-            <a href="#process" className="text-black/58 hover:text-black">Process</a>
-            <a href="#pricing" className="text-black/58 hover:text-black">Pricing</a>
-            <ArrowButton href="#start" small>Start a sprint</ArrowButton>
-          </nav>
-          <button onClick={() => setMenuOpen((v) => !v)} className="grid size-11 place-items-center rounded-full border border-black/12 md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation">
-            {menuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
-          </button>
+  return <div className="site-shell">
+    <a href="#main" className="skip-link">Skip to content</a>
+    <header className="site-header">
+      <div className="page-width header-inner">
+        <Logo />
+        <nav aria-label="Main navigation" className="desktop-nav"><a href="#work">The work</a><a href="#approach">Our approach</a><a href="#pricing">Packages</a></nav>
+        <div className="header-actions"><CTA className="header-cta">Let’s make a move</CTA><button ref={menuButton} className="menu-toggle" aria-label={menuOpen ? "Close navigation" : "Open navigation"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={22}/> : <Menu size={22}/>}</button></div>
+      </div>
+      {menuOpen && <nav id="mobile-menu" aria-label="Mobile navigation" className="mobile-nav"><a href="#work" onClick={() => setMenuOpen(false)}>The work <ArrowUpRight size={20}/></a><a href="#approach" onClick={() => setMenuOpen(false)}>Our approach <ArrowUpRight size={20}/></a><a href="#pricing" onClick={() => setMenuOpen(false)}>Packages <ArrowUpRight size={20}/></a><a href="#start" onClick={() => setMenuOpen(false)}>Start a brief <ArrowUpRight size={20}/></a></nav>}
+    </header>
+    <main id="main">
+      <section id="top" className="hero-section">
+        <div className="page-width hero-grid">
+          <div className="hero-copy"><div className="eyebrow"><span className="status-dot"/> Independent ecommerce creative studio</div><h1>Good product.<br/>Great story.<br/><em>Next ad.</em></h1><p>We turn what makes your product worth buying into video ads worth testing. Fresh hooks. Clear demos. More ways in.</p><div className="hero-actions"><CTA>Build your creative sprint</CTA><a href="#work" className="text-link">Explore the concepts <ArrowDown size={16}/></a></div><div className="hero-footnote"><span>Strategy through final cut</span><span>Packages from $397</span></div></div>
+          <div className="hero-visual"><div className="art-caption"><span>THE CREATIVE POSSIBILITIES DEPT.</span><span>EST. 2026</span></div><img src="/illustrations/creative-studio.svg" width="640" height="660" alt="Custom studio illustration of a body wash bottle, botanical leaves, an orange ribbon and a director’s clapperboard" fetchPriority="high"/><div className="art-note"><span className="note-arrow" aria-hidden="true">↖</span> One product. A whole lot of angles.</div></div>
         </div>
-        {menuOpen && (
-          <nav id="mobile-navigation" aria-label="Mobile navigation" className="mx-auto mt-2 max-w-[1500px] rounded-[18px] border border-black/10 bg-[#f4f2ea] p-4 shadow-2xl md:hidden">
-            {["work", "services", "process", "pricing", "start"].map((item) => <a onClick={() => setMenuOpen(false)} className="block border-b border-black/8 py-3 text-lg capitalize last:border-0" href={`#${item}`} key={item}>{item}</a>)}
-          </nav>
-        )}
-      </header>
+        <div className="page-width platform-line"><span>Made for the feed.<br/><strong>Built for your next test.</strong></span><div><span>Meta</span><span>TikTok</span><span>YouTube Shorts</span></div><span className="platform-aside">SCROLL LESS.<br/>SEE MORE. <ArrowDown size={14}/></span></div>
+      </section>
 
-      <main id="main">
-        <section id="top" className="hero-shell relative overflow-hidden bg-[#10110f] px-4 pb-8 pt-28 text-white md:px-7 md:pb-10 md:pt-36">
-          <div className="pointer-events-none absolute inset-0 grid-lines opacity-40" />
-          <div className="pointer-events-none absolute -right-32 -top-40 size-[650px] rounded-full bg-[#7155ff]/15 blur-[140px]" />
-          <div className="relative mx-auto max-w-[1500px]">
-            <div className="mb-7 flex items-center justify-between border-b border-white/15 pb-5 text-[10px] font-bold uppercase tracking-[.16em] text-white/45 md:mb-12">
-              <span className="text-[#dfff3f]">Independent creative studio</span><span>Built for the next test ↗</span>
-            </div>
-            <div className="grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end lg:gap-8">
-              <div className="pb-0 lg:pb-10">
-                <div className="kicker mb-6 text-[#dfff3f]">Direct-response ecommerce creative</div>
-                <h1 className="hero-title max-w-[1000px]">The scroll<br />doesn’t <span className="hero-outline">wait.</span><span className="text-[#dfff3f]">✳</span></h1>
-                <p className="mt-7 max-w-[610px] text-base leading-[1.55] text-white/65 md:mt-10 md:text-xl">Your product deserves more than one shot at attention. We build product-first video ads, fresh hooks and new angles your team can put to the test.</p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-10">
-                  <ArrowButton href="#start" inverse>Start a creative sprint</ArrowButton>
-                  <a href="#work" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white/80 hover:border-white/60 hover:text-white">Explore concepts <ArrowDown className="size-4 transition-transform group-hover:translate-y-1" /></a>
-                </div>
-                <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/15 pt-5 text-[11px] font-semibold uppercase tracking-[.12em] text-white/42 md:mt-16"><span>Product-first</span><span>Multiple angles</span><span>Made for testing</span></div>
-              </div>
-              <div className="hero-art relative min-h-[450px] overflow-hidden rounded-[24px] border border-white/15 bg-[#1d1f1a] p-4 sm:min-h-[550px] md:p-6 lg:min-h-[630px]">
-                <div className="absolute inset-0 hero-art-grid" />
-                <div className="relative flex items-center justify-between text-[10px] font-bold uppercase tracking-[.15em] text-white/55"><span>ScrollSprint / Creative lab</span><span>01—03</span></div>
-                <div className="hero-art-frame absolute inset-x-[12%] top-[15%] bottom-[13%] rotate-[-7deg] overflow-hidden rounded-[20px] border border-white/30 bg-[#dfff3f] p-5 text-black shadow-[24px_32px_0_rgba(0,0,0,.25)] sm:p-8">
-                  <div className="flex items-center justify-between border-b border-black/25 pb-3 text-[10px] font-black uppercase tracking-[.14em]"><span>Concept / motion</span><span>9:16 ↗</span></div>
-                  <div className="absolute inset-x-0 top-[22%] flex justify-center"><div className="hero-orbit grid size-48 place-items-center rounded-full border-[20px] border-black/90 text-[100px] font-black leading-none tracking-[-.1em] sm:size-64 sm:border-[27px]">S</div></div>
-                  <div className="absolute bottom-6 left-5 right-5 sm:bottom-8 sm:left-8 sm:right-8"><div className="text-[clamp(2.5rem,6vw,5.5rem)] font-black uppercase leading-[.82] tracking-[-.09em]">Make<br />them<br />look.</div><div className="mt-5 flex justify-between border-t border-black/25 pt-3 text-[9px] font-black uppercase tracking-[.14em]"><span>Hook / Angle / Action</span><span>↗</span></div></div>
-                </div>
-                <div className="absolute bottom-5 right-5 rounded-full border border-white/20 bg-[#171816] px-4 py-2 text-[10px] font-bold uppercase tracking-[.1em] text-white/80 backdrop-blur">Creative testing, on repeat</div>
-              </div>
-            </div>
+      <section id="work" className="section-space work-section">
+        <div className="page-width">
+          <div className="section-topline"><span className="eyebrow">01 / The concept room</span><span className="tiny-note">A LITTLE PRODUCT OBSESSION GOES A LONG WAY.</span></div>
+          <div className="section-heading"><h2>Different products.<br/><em>Distinct possibilities.</em></h2><p>A glimpse into the ideas we’re developing. Explore the opening hook, the story and the product moment behind each concept.</p></div>
+          <div className="concept-grid">
+            {(showAll ? concepts : concepts.slice(0,3)).map((item, i) => <article className="concept-card" key={item.brand}>
+              <button className={`concept-art tone-${item.color}`} onClick={() => setSelectedConcept(item)} aria-label={`Explore ${item.brand} concept`}><div className="concept-art-top"><span>CONCEPT {String(i+1).padStart(2,"0")}</span><span>{item.category}</span></div><img src={`/illustrations/${item.image}.svg`} alt={`Original ${item.category.toLowerCase()} illustration for the ${item.brand} concept`} width="600" height="480" loading="lazy"/><div className="concept-art-bottom"><span><Film size={13}/> Video coming soon</span><span className="concept-open"><ArrowUpRight size={19}/></span></div></button>
+              <div className="concept-info"><span>{item.brand}</span><h3><button onClick={() => setSelectedConcept(item)}>{item.title}</button></h3><p>{item.angle}</p></div>
+            </article>)}
           </div>
-        </section>
-
-        <div className="overflow-hidden border-y border-black/10 bg-[#dfff3f] py-3">
-          <div className="marquee-track flex w-max items-center gap-8 whitespace-nowrap text-[12px] font-black uppercase tracking-[.16em]">
-            {[...Array(2)].flatMap(() => ["Meta", "TikTok", "Shorts", "Product demos", "Hooks", "Angles", "UGC-style", "Variations", "Sound design"]).map((item, i) => <span className="flex items-center gap-8" key={`${item}-${i}`}>{item}<span className="size-1.5 rounded-full bg-black" /></span>)}
-          </div>
+          <div className="work-bottom"><p>Self-initiated concept campaigns. Illustrations show creative direction, not final product renders or commissioned work.</p><button className="text-link" aria-expanded={showAll} onClick={() => setShowAll(!showAll)}>{showAll ? "Show featured concepts" : "Explore all six concepts"} {showAll ? <ArrowRight size={16}/> : <Plus size={16}/>}</button></div>
         </div>
+      </section>
 
-        <section id="services" className="px-4 py-24 md:px-7 md:py-32">
-          <div className="mx-auto max-w-[1500px]">
-            <div className="grid gap-12 lg:grid-cols-[.72fr_1.28fr]">
-              <div>
-                <div className="kicker mb-6 text-black/50">01 / The problem</div>
-                <p className="max-w-sm text-base leading-relaxed text-black/50">Most brands do not run out of products. They run out of fresh ways to sell them.</p>
-              </div>
-              <div>
-                <h2 className="section-title">Your media buyer cannot test ideas <span className="text-black/25">you never produce.</span></h2>
-                <p className="mt-8 max-w-3xl text-xl leading-relaxed text-black/60">We turn one product into multiple hooks, angles and finished video creatives so your team has more credible creative to put into market.</p>
-              </div>
-            </div>
-
-            <div className="mt-20 grid border-l border-t border-black/10 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                [Clapperboard, "Product demos", "Show the mechanism, use-case and payoff without burying the product."],
-                [Sparkles, "UGC-style concepts", "Creator-native structures without turning the brand into generic talking-head content."],
-                [Layers3, "Hook variations", "One core idea becomes multiple openings so the test actually tests the hook."],
-                [Gauge, "Testing velocity", "Finished variations, captions, sound and CTAs ready for the paid-social queue."],
-              ].map(([Icon, title, copy], i) => {
-                const IconComponent = Icon as typeof Clapperboard;
-                return <div key={String(title)} className="min-h-[220px] border-b border-r border-black/10 p-6 md:p-7"><div className="flex items-center justify-between"><IconComponent className="size-5" /><span className="text-xs font-bold text-black/25">0{i + 1}</span></div><h3 className="mt-12 md:mt-20 text-2xl font-semibold tracking-[-.04em]">{String(title)}</h3><p className="mt-3 text-sm leading-relaxed text-black/50">{String(copy)}</p></div>;
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section id="work" className="bg-[#0b0b0b] px-4 py-24 text-white md:px-7 md:py-32">
-          <div className="mx-auto max-w-[1500px]">
-            <div className="flex flex-col gap-8 border-b border-white/12 pb-12 md:flex-row md:items-end md:justify-between">
-              <div><div className="kicker mb-6 text-[#dfff3f]">02 / Selected concepts</div><h2 className="section-title max-w-5xl">Built to make the product <span className="text-white/28">impossible to ignore.</span></h2></div>
-              <p className="max-w-sm text-sm leading-relaxed text-white/45">Six self-initiated concepts. Videos will be added here as production finishes. The creative direction is ready to explore.</p>
-            </div>
-
-            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-12">
-              {portfolio.map((item, i) => (
-                <Reveal key={item.title} delay={i * .04} className={`portfolio-card group overflow-hidden rounded-[22px] border border-white/15 bg-[#181a17] ${i < 2 ? "xl:col-span-6" : "xl:col-span-3"}`}>
-                  <div className={`video-placeholder portfolio-stage stage-${i + 1} relative flex flex-col justify-between overflow-hidden p-5 md:p-6 ${i < 2 ? "aspect-[4/4.2] sm:aspect-[4/3]" : "aspect-[4/4.2]"}`}>
-                    <div className="relative z-10 flex items-start justify-between gap-2"><Pill dark>Spec creative</Pill><span className="text-[11px] font-bold tracking-[.12em] text-white/55">{item.tone} / 06</span></div>
-                    <div aria-hidden="true" className="portfolio-glyph relative z-10 self-center text-[clamp(6rem,20vw,15rem)] font-black leading-none tracking-[-.14em] text-white/80">{["P", "A", "D", "F", "Z", "H"][i]}</div>
-                    <div className="relative z-10 flex items-end justify-between gap-2"><span className="rounded-full border border-white/25 bg-black/30 px-3 py-2 text-[10px] font-bold uppercase tracking-[.12em] backdrop-blur">Video coming soon</span><MoveUpRight className="size-5 text-white/65" /></div>
-                  </div>
-                  <div className="flex min-h-36 flex-col justify-between p-5 md:p-6"><div className="flex items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[.14em] text-white/45"><span>{item.name} / {item.type}</span><span>Concept</span></div><div><h3 className="mt-5 text-[clamp(1.45rem,2.5vw,2rem)] font-semibold leading-[1.02] tracking-[-.045em]">{item.title}</h3><p className="mt-2 text-xs text-white/45">{item.idea}</p></div></div>
-                </Reveal>
-              ))}
-            </div>
-            <div className="mt-7 border-t border-white/10 pt-5 text-[10px] font-semibold uppercase tracking-[.12em] text-white/30">All work shown above is self-initiated concept/spec work, not commissioned client work.</div>
-          </div>
-        </section>
-
-        <section id="process" className="px-4 py-24 md:px-7 md:py-32">
-          <div className="mx-auto max-w-[1500px]">
-            <div className="grid gap-12 lg:grid-cols-[.72fr_1.28fr]">
-              <div><div className="kicker mb-6 text-black/50">03 / The sprint</div><Pill>Concept → production → variations</Pill></div>
-              <div><h2 className="section-title">A creative pipeline, <span className="text-black/25">not one expensive commercial.</span></h2><p className="mt-7 max-w-2xl text-lg leading-relaxed text-black/55">The goal is not to make one beautiful video and hope. The goal is to give your paid-social team multiple credible creative directions to test quickly.</p></div>
-            </div>
-            <div className="mt-20 grid gap-px overflow-hidden rounded-[24px] bg-black/10 border border-black/10 md:grid-cols-2 xl:grid-cols-4">
-              {[
-                ["01", "Send the product", "Share your URL, existing ads and what your team already knows."],
-                ["02", "Map the angles", "We identify the strongest hooks, pain points and concepts."],
-                ["03", "Build the sprint", "Production, editing, voiceover, captions and variations."],
-                ["04", "Test + learn", "Your team tests. The learnings shape the next creative batch."],
-              ].map(([n, title, copy]) => <div key={n} className="min-h-[220px] md:min-h-[310px] bg-[#f4f2ea] p-7"><div className="text-xs font-black text-black/25">{n}</div><div className="mt-12 md:mt-24 text-2xl font-semibold tracking-[-.04em]">{title}</div><p className="mt-3 text-sm leading-relaxed text-black/50">{copy}</p></div>)}
-            </div>
-          </div>
-        </section>
-
-        <section id="pricing" className="bg-[#c8bfff] px-4 py-24 md:px-7 md:py-32">
-          <div className="mx-auto max-w-[1500px]">
-            <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end"><div><div className="kicker mb-6 text-black/55">04 / Packages</div><h2 className="section-title max-w-5xl">Start with one sprint.<br /><span className="text-black/35">Scale what earns another test.</span></h2></div><div className="max-w-sm text-sm leading-relaxed text-black/55">Choose a defined batch. Each package includes finished creative and opening variations for your team to test.</div></div>
-            <div className="mt-16 grid gap-4 lg:grid-cols-3">
-              {pricing.map((pack) => <div key={pack.name} className={`relative flex min-h-[500px] lg:min-h-[590px] flex-col rounded-[24px] border p-6 md:p-7 ${pack.featured ? "border-black bg-black text-white shadow-[0_30px_80px_rgba(0,0,0,.18)]" : "border-black/15 bg-[#f4f2ea]/65"}`}>
-                {pack.featured && <span className="absolute right-5 top-5 rounded-full bg-[#dfff3f] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-black">Primary offer</span>}
-                <div className={`text-[11px] font-bold uppercase tracking-[.14em] ${pack.featured ? "text-white/40" : "text-black/40"}`}>{pack.name}</div>
-                <div className="mt-7 text-6xl font-semibold tracking-[-.06em]">{pack.price}</div>
-                <p className={`mt-4 max-w-sm text-sm leading-relaxed ${pack.featured ? "text-white/50" : "text-black/50"}`}>{pack.description}</p>
-                <div className={`my-7 h-px ${pack.featured ? "bg-white/12" : "bg-black/10"}`} />
-                <div className="space-y-3.5">{pack.items.map((item) => <div className="flex items-start gap-3 text-sm" key={item}><span className={`mt-0.5 grid size-5 shrink-0 place-items-center rounded-full ${pack.featured ? "bg-[#dfff3f] text-black" : "bg-black text-white"}`}><Check className="size-3" /></span><span className={pack.featured ? "text-white/75" : "text-black/65"}>{item}</span></div>)}</div>
-                <div className="mt-auto pt-8"><ArrowButton href="#start" inverse={pack.featured}>Choose {pack.name}</ArrowButton></div>
-              </div>)}
-            </div>
-            <div className="mt-4 flex flex-col gap-4 rounded-[22px] border border-black/15 bg-[#f4f2ea]/65 p-6 md:flex-row md:items-center md:justify-between"><div><div className="text-lg font-semibold tracking-[-.03em]">Monthly Creative Engine</div><div className="mt-1 text-sm text-black/50">Scope defined after the first sprint based on volume and testing cadence.</div></div><div className="text-2xl font-semibold tracking-[-.04em]">From $2,000/mo</div></div>
-          </div>
-        </section>
-
-        <section className="px-4 py-24 md:px-7 md:py-32">
-          <div className="mx-auto max-w-[1500px]">
-            <div className="grid gap-14 lg:grid-cols-2">
-              <div><div className="kicker mb-6 text-black/50">05 / FAQ</div><h2 className="section-title">Straight answers.<br /><span className="text-black/25">No pitch fog.</span></h2></div>
-              <div className="divide-y divide-black/12 border-y border-black/12">{faq.map(([q, a]) => <details className="group py-5" key={q}><summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-lg font-semibold tracking-[-.025em]"><span>{q}</span><span className="grid size-8 shrink-0 place-items-center rounded-full border border-black/12"><ChevronDown className="size-4 transition-transform group-open:rotate-180" /></span></summary><p className="max-w-2xl pr-12 pt-4 text-sm leading-relaxed text-black/55">{a}</p></details>)}</div>
-            </div>
-          </div>
-        </section>
-
-        <section id="start" className="bg-[#dfff3f] px-4 py-24 md:px-7 md:py-32">
-          <div className="mx-auto max-w-[1500px]">
-            <div className="grid gap-14 lg:grid-cols-[1fr_.72fr]">
-              <div><div className="kicker mb-7 text-black/55">06 / Start</div><h2 className="section-title max-w-5xl">Give us one product.<br /><span className="text-black/38">We’ll give you more ways to sell it.</span></h2><p className="mt-7 max-w-2xl text-lg leading-relaxed text-black/60">Tell us what you sell and what you want to test. Copy the brief, then send it through the channel where we connected.</p></div>
-              <div className="rounded-[26px] border border-black/15 bg-[#f4f2ea] p-5 shadow-[0_35px_90px_rgba(0,0,0,.12)] md:p-7">
-                <div className="mb-6 flex items-center justify-between"><div><div className="text-lg font-semibold tracking-[-.03em]">Creative Sprint Brief</div><div className="mt-1 text-xs text-black/45">Your starting point for a focused creative batch.</div></div><Zap className="size-5" /></div>
-                <label className="block text-xs font-bold uppercase tracking-[.12em] text-black/45">Product URL<input value={productUrl} onChange={(e) => setProductUrl(e.target.value)} placeholder="https://yourstore.com/product" className="mt-2 w-full rounded-[14px] border border-black/12 bg-white/70 px-4 py-3.5 text-sm font-medium tracking-normal outline-none transition focus:border-black/35" /></label>
-                <label className="mt-4 block text-xs font-bold uppercase tracking-[.12em] text-black/45">What should the creative sell or test?<textarea value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Lead with the mess problem, demonstrate the product, then test 3 opening hooks." rows={4} className="mt-2 w-full resize-none rounded-[14px] border border-black/12 bg-white/70 px-4 py-3.5 text-sm font-medium leading-relaxed tracking-normal outline-none transition focus:border-black/35" /></label>
-                <p className="mt-4 text-xs leading-relaxed text-black/55">This brief stays on your device until you copy and send it.</p>
-                <button onClick={copyBrief} className="group mt-5 flex w-full items-center justify-between rounded-full bg-black px-5 py-4 text-sm font-semibold text-white transition hover:bg-[#7c62ff]"><span>{copied ? "Brief copied" : "Copy sprint brief"}</span>{copied ? <Check className="size-4" /> : <Copy className="size-4" />}</button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="bg-[#0a0a0a] px-4 py-8 text-white md:px-7">
-        <div className="mx-auto flex max-w-[1500px] flex-col gap-8 md:flex-row md:items-end md:justify-between">
-          <div><Logo className="[&_span]:text-white [&_span_span]:text-white/35" /><div className="mt-5 max-w-md text-sm leading-relaxed text-white/38">Direct-response creative for ecommerce. More ads to test. Less production drag.</div></div>
-          <div className="flex flex-wrap items-center gap-5 text-xs font-semibold text-white/45"><a href="#top" className="hover:text-white">Top</a><a href="#work" className="hover:text-white">Work</a><a href="#pricing" className="hover:text-white">Pricing</a><a href="#start" className="inline-flex items-center gap-2 text-white hover:text-[#dfff3f]">Start a sprint <ArrowRight className="size-3.5" /></a></div>
+      <section id="services" className="promise-section section-space">
+        <div className="page-width promise-grid"><div><span className="eyebrow">02 / More room to test</span><h2>A great product<br/>has more than<br/><em>one good story.</em></h2><p>Your next creative batch should give your team something new to learn. We build around the product, the buying moment and the reason to care.</p><a href="#pricing" className="text-link">Find your starting point <ArrowUpRight size={17}/></a></div>
+          <div className="deliverables"><div className="deliverable"><span className="drawn-index">01</span><div><h3>A reason to stop</h3><p>Openings built around a recognizable problem, an unexpected detail or a compelling product moment.</p><span className="deliverable-tag">HOOKS + CREATIVE ANGLES</span></div><MousePointer2 size={24}/></div><div className="deliverable"><span className="drawn-index">02</span><div><h3>A product to believe in</h3><p>Clear demonstrations and thoughtful stories showing what the product does and where it fits.</p><span className="deliverable-tag">PRODUCT DEMOS + UGC-STYLE</span></div><Film size={24}/></div><div className="deliverable"><span className="drawn-index">03</span><div><h3>More ways to find the fit</h3><p>Finished cuts, opening variations, captions and sound, organized for the next round of testing.</p><span className="deliverable-tag">EDITING + VARIATIONS + SOUND</span></div><Scissors size={24}/></div></div>
         </div>
-        <div className="mx-auto mt-8 flex max-w-[1500px] flex-col gap-2 border-t border-white/10 pt-5 text-[10px] font-semibold uppercase tracking-[.12em] text-white/25 md:flex-row md:justify-between"><span>© {new Date().getFullYear()} ScrollSprint Creative</span><span>Concept work is labeled. No fabricated performance claims.</span></div>
-      </footer>
-    </div>
-  );
+      </section>
+
+      <section id="approach" className="section-space approach-section">
+        <div className="page-width"><div className="section-topline"><span className="eyebrow">03 / Small team. Clear process.</span><span className="tiny-note">FROM YOUR PRODUCT PAGE TO THE PAID-SOCIAL QUEUE.</span></div><div className="section-heading"><h2>Less back-and-forth.<br/><em>More forward motion.</em></h2><p>You bring the product knowledge. We connect the strategy, production and edit into one focused sprint.</p></div>
+          <div className="process-grid">{[
+            ["01", "Get the product.", "Your product link, assets, current ads and learnings. We agree on the brief and what the batch needs to explore.", "A focused brief"],
+            ["02", "Find the story.", "We map the hooks, buying moments and product demonstrations. The creative direction gets approved before production.", "A clear creative direction"],
+            ["03", "Make the move.", "Production, editing, voiceover, captions and sound come together. Your revision round helps refine the final batch.", "Finished creative + variations"],
+            ["04", "Test. Learn. Repeat.", "Your team launches the ads. Share the results and the next sprint builds on what you learn.", "A smarter next batch"],
+          ].map(([num,title,body,output])=><div className="process-step" key={num}><div className="process-number">{num}<ArrowUpRight size={20}/></div><h3>{title}</h3><p>{body}</p><div className="process-output"><Check size={14}/>{output}</div></div>)}</div>
+          <div className="delivery-strip"><AudioLines size={22}/><p>Every detail earns its place. <span>Hook. Product. Voice. Cut. Caption. CTA.</span></p><span>READY FOR YOUR NEXT TEST</span></div>
+        </div>
+      </section>
+
+      <section id="pricing" className="section-space pricing-section"><div className="page-width"><div className="section-topline"><span className="eyebrow">04 / Pick your pace</span><span className="tiny-note">DEFINED SCOPE. ONE CREATIVE BATCH.</span></div><div className="section-heading"><h2>Start with a sprint.<br/><em>See where it takes you.</em></h2><p>A first experiment or a fuller queue. Choose the batch your team is ready to put into market.</p></div>
+        <div className="pricing-grid">{packages.map(pack=><article key={pack.name} className={`price-card ${pack.featured ? "price-featured" : ""}`}><div className="price-top"><h3>{pack.name}</h3>{pack.featured && <span>THE CORE SPRINT</span>}</div><p className="price-intro">{pack.intro}</p><div className="price-amount">{pack.price}<span>USD / project</span></div><div className="price-stats"><div><strong>{pack.ads}</strong><span>finished ads</span></div><div><strong>{pack.hooks}</strong><span>hook variations</span></div></div><ul>{pack.items.map(item=><li key={item}><Check size={15}/><span>{item}</span></li>)}</ul><a href="#start" onClick={()=>choosePackage(pack.name)} className={`ss-button ${pack.featured ? "ss-button-orange" : "ss-button-outline"}`}><span>Choose {pack.name}</span><ArrowUpRight size={17}/></a></article>)}</div>
+        <div className="retainer-line"><div><strong>Already thinking about the next batch?</strong><p>Monthly creative partnerships start at $2,000. Scope follows your testing cadence.</p></div><a href="#start" onClick={()=>choosePackage("Monthly partnership")} className="text-link">Plan an ongoing partnership <ArrowUpRight size={17}/></a></div>
+      </div></section>
+
+      <section className="section-space faq-section"><div className="page-width faq-grid"><div><span className="eyebrow">05 / Before we get rolling</span><h2>Good questions.<br/><em>Clear answers.</em></h2><p>The details, without the guesswork.</p></div><div className="faq-list">{questions.map(([q,a])=><details key={q}><summary><span>{q}</span><Plus size={20} aria-hidden="true"/></summary><p>{a}</p></details>)}</div></div></section>
+
+      <section id="start" className="start-section section-space"><div className="page-width start-grid"><div className="start-copy"><span className="eyebrow">06 / Your next good move</span><h2>Bring the product.<br/>We’ll bring<br/><em>the possibilities.</em></h2><p>A few details give us a better starting point. Prepare your brief, then share it in our conversation so we can confirm the scope and next steps.</p><div className="brief-promise"><CheckCheck size={22}/><span>No payment here.<br/><strong>Start with a clear conversation.</strong></span></div></div>
+          <div className="brief-panel"><div className="brief-panel-head"><span>YOUR CREATIVE BRIEF</span><span>01 / LET’S START HERE</span></div>
+          <form onSubmit={prepareBrief} onChange={()=>{setBriefReady(false);setCopyStatus("");}}>
+            <label htmlFor="product">What are we making ads for?<input id="product" name="product" type="url" placeholder="https://yourstore.com/product" value={product} onChange={e=>setProduct(e.target.value)} required autoComplete="url"/></label>
+            <div className="brief-fields"><label htmlFor="package">Your starting point<select id="package" value={selectedPackage} onChange={e=>setSelectedPackage(e.target.value)}>{[...packages.map(p=>p.name),"Monthly partnership","Help me choose"].map(n=><option key={n}>{n}</option>)}</select></label><label htmlFor="platform">Primary platform<select id="platform" value={platform} onChange={e=>setPlatform(e.target.value)}><option>Meta</option><option>TikTok</option><option>YouTube Shorts</option><option>Multiple platforms</option></select></label></div>
+            <label htmlFor="goal">What do you want this batch to explore?<textarea id="goal" name="goal" rows={3} placeholder="Your product’s strongest benefit, a new offer, or an angle you want to test…" value={goal} onChange={e=>setGoal(e.target.value)} required minLength={10}/></label>
+            <button type="submit" className="ss-button ss-button-dark brief-submit"><span>{briefReady ? "Update my brief" : "Prepare my brief"}</span><ArrowRight size={18}/></button><p className="brief-privacy">Nothing is sent automatically. You review and share the brief.</p>
+          </form>
+          {briefReady && <div ref={result} tabIndex={-1} className="brief-result"><h3><Check size={18}/> Your brief is ready.</h3><p>Copy or download it, then send it through the channel where we connected.</p><textarea readOnly value={brief} aria-label="Your prepared creative brief" rows={7}/><div className="brief-result-actions"><button type="button" className="ss-button ss-button-dark" onClick={copyBrief}><Copy size={15}/> Copy brief</button><button type="button" className="ss-button ss-button-outline" onClick={downloadBrief}><Download size={15}/> Download</button></div></div>}
+          <p role="status" aria-live="polite" className="copy-status">{copyStatus}</p>
+          </div></div></section>
+    </main>
+    <footer className="site-footer"><div className="page-width"><div className="footer-top"><Logo/><p>More ads to test.<br/><em>Less production drag.</em></p><a href="#top" className="back-top" aria-label="Back to top"><ArrowUpRight size={25}/></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} ScrollSprint Creative</span><nav aria-label="Footer navigation"><a href="#work">The work</a><a href="#pricing">Packages</a><a href="#start">Start a brief</a></nav><span>INDEPENDENT BY DESIGN.</span></div></div></footer>
+    <dialog ref={dialog} className="concept-dialog" onClose={()=>setSelectedConcept(null)} onClick={e=>{if(e.target===e.currentTarget)dialog.current?.close();}} aria-labelledby="concept-dialog-title">
+      {selectedConcept && <><button className="dialog-close" onClick={()=>dialog.current?.close()} aria-label="Close concept"><X size={21}/></button><div className={`dialog-art tone-${selectedConcept.color}`}><img src={`/illustrations/${selectedConcept.image}.svg`} width="600" height="480" alt={`${selectedConcept.brand} concept illustration`}/><span><Film size={14}/> Video coming soon</span></div><div className="dialog-copy"><span className="eyebrow">{selectedConcept.brand} / Spec creative</span><h2 id="concept-dialog-title">{selectedConcept.title}</h2><p className="concept-hook">“{selectedConcept.hook}”</p><ol>{selectedConcept.frames.map((frame,i)=><li key={frame}><span>0{i+1}</span>{frame}</li>)}</ol><div className="dialog-foot"><span>{selectedConcept.format}</span><span>Self-initiated concept</span></div></div></>}
+    </dialog>
+  </div>;
 }
