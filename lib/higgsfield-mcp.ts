@@ -10,10 +10,6 @@ import {
 } from "@/lib/higgsfield-api";
 
 const DEFAULT_HARD_CAP_USD = 2;
-const READ_SECURITY = [{ type: "oauth2" as const, scopes: ["higgsfield.read"] }];
-const WRITE_SECURITY = [
-  { type: "oauth2" as const, scopes: ["higgsfield.read", "higgsfield.generate"] },
-];
 
 function hardCapUsd() {
   const configured = Number(process.env.SCROLLSPRINT_MCP_MAX_GENERATION_USD);
@@ -63,7 +59,6 @@ export function buildHiggsfieldMcpServer() {
       description:
         "Use this to verify that the ScrollSprint server can authenticate to the Higgsfield PAYG API. It does not create a generation or spend credits.",
       inputSchema: z.object({}),
-      securitySchemes: READ_SECURITY,
       annotations: {
         readOnlyHint: true,
         destructiveHint: false,
@@ -101,7 +96,6 @@ export function buildHiggsfieldMcpServer() {
         endpoint: endpointSchema,
         input: inputSchema,
       }),
-      securitySchemes: READ_SECURITY,
       annotations: {
         readOnlyHint: true,
         destructiveHint: false,
@@ -140,7 +134,6 @@ export function buildHiggsfieldMcpServer() {
             "Maximum USD you authorize for this single generation. The server also enforces its own hard cap.",
           ),
       }),
-      securitySchemes: WRITE_SECURITY,
       annotations: {
         readOnlyHint: false,
         destructiveHint: true,
@@ -220,7 +213,6 @@ export function buildHiggsfieldMcpServer() {
       inputSchema: z.object({
         request_id: z.string().min(1),
       }),
-      securitySchemes: READ_SECURITY,
       annotations: {
         readOnlyHint: true,
         destructiveHint: false,
@@ -250,7 +242,6 @@ export function buildHiggsfieldMcpServer() {
       inputSchema: z.object({
         request_id: z.string().min(1),
       }),
-      securitySchemes: WRITE_SECURITY,
       annotations: {
         readOnlyHint: false,
         destructiveHint: true,
