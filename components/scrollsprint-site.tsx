@@ -12,7 +12,7 @@ import {
   Gauge,
   Layers3,
   Menu,
-  Play,
+  MoveUpRight,
   Sparkles,
   X,
   Zap,
@@ -92,8 +92,9 @@ export function ScrollSprintSite() {
 
   return (
     <div className="noise min-h-screen overflow-x-clip">
-      <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-7">
-        <div className="mx-auto flex max-w-[1500px] items-center justify-between rounded-[18px] border border-black/10 bg-[#f4f2ea]/88 px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,.06)] backdrop-blur-xl md:px-5">
+      <a className="skip-link" href="#main">Skip to content</a>
+      <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 md:px-7 md:pt-5">
+        <div className="mx-auto flex max-w-[1500px] items-center justify-between rounded-[14px] border border-black/10 bg-[#f4f2ea]/95 px-3 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,.08)] backdrop-blur-xl md:rounded-[18px] md:px-5 md:py-3">
           <Logo />
           <nav className="hidden items-center gap-7 text-sm font-medium md:flex">
             <a href="#work" className="text-black/58 hover:text-black">Work</a>
@@ -102,52 +103,45 @@ export function ScrollSprintSite() {
             <a href="#pricing" className="text-black/58 hover:text-black">Pricing</a>
             <ArrowButton href="#start" small>Start a sprint</ArrowButton>
           </nav>
-          <button onClick={() => setMenuOpen((v) => !v)} className="grid size-10 place-items-center rounded-full border border-black/12 md:hidden" aria-label="Toggle menu">
+          <button onClick={() => setMenuOpen((v) => !v)} className="grid size-11 place-items-center rounded-full border border-black/12 md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation">
             {menuOpen ? <X className="size-4" /> : <Menu className="size-4" />}
           </button>
         </div>
         {menuOpen && (
-          <div className="mx-auto mt-2 max-w-[1500px] rounded-[18px] border border-black/10 bg-[#f4f2ea] p-4 shadow-2xl md:hidden">
+          <nav id="mobile-navigation" aria-label="Mobile navigation" className="mx-auto mt-2 max-w-[1500px] rounded-[18px] border border-black/10 bg-[#f4f2ea] p-4 shadow-2xl md:hidden">
             {["work", "services", "process", "pricing", "start"].map((item) => <a onClick={() => setMenuOpen(false)} className="block border-b border-black/8 py-3 text-lg capitalize last:border-0" href={`#${item}`} key={item}>{item}</a>)}
-          </div>
+          </nav>
         )}
       </header>
 
-      <main id="top">
-        <section className="relative min-h-[100svh] overflow-hidden bg-[#0a0a0a] px-4 pb-8 pt-32 text-white md:px-7 md:pt-36">
-          <div className="pointer-events-none absolute inset-0 grid-lines opacity-60" />
-          <div className="pointer-events-none absolute -left-40 top-10 size-[520px] rounded-full bg-[#7c62ff]/20 blur-[120px]" />
-          <div className="pointer-events-none absolute -right-40 bottom-0 size-[520px] rounded-full bg-[#dfff3f]/10 blur-[120px]" />
-
-          <div className="relative mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[1.18fr_.82fr] lg:items-end">
-            <div>
-              <div className="kicker anim-rise mb-8 text-[#dfff3f]" style={{ "--rise-y": "18px", "--rise-d": ".7s" } as CSSProperties}>Direct-response creative for ecommerce</div>
-              <h1 className="display anim-rise max-w-[1150px]" style={{ "--rise-y": "35px", "--rise-d": ".8s", "--rise-delay": ".05s" } as CSSProperties}>
-                More ads<br />to test. <span className="text-white/32">Less</span><br /><span className="text-white/32">production</span> drag.
-              </h1>
-              <div className="mt-10 grid gap-7 border-t border-white/14 pt-7 md:grid-cols-[1fr_auto] md:items-end">
-                <p className="max-w-[680px] text-lg leading-relaxed text-white/62 md:text-xl">Product-first video creatives for ecommerce teams that need fresh hooks, new angles and testing variations—without waiting weeks for production.</p>
-                <div className="flex flex-wrap gap-3">
-                  <ArrowButton href="#start" inverse>Start a Creative Sprint</ArrowButton>
-                  <a href="#work" className="group inline-flex items-center gap-3 rounded-full border border-white/16 px-5 py-3.5 text-[15px] font-semibold text-white/80 hover:border-white/40 hover:text-white">Watch the work <ArrowDown className="size-4 transition-transform group-hover:translate-y-0.5" /></a>
-                </div>
-              </div>
+      <main id="main">
+        <section id="top" className="hero-shell relative overflow-hidden bg-[#10110f] px-4 pb-8 pt-28 text-white md:px-7 md:pb-10 md:pt-36">
+          <div className="pointer-events-none absolute inset-0 grid-lines opacity-40" />
+          <div className="pointer-events-none absolute -right-32 -top-40 size-[650px] rounded-full bg-[#7155ff]/15 blur-[140px]" />
+          <div className="relative mx-auto max-w-[1500px]">
+            <div className="mb-7 flex items-center justify-between border-b border-white/15 pb-5 text-[10px] font-bold uppercase tracking-[.16em] text-white/45 md:mb-12">
+              <span className="text-[#dfff3f]">Independent creative studio</span><span>Built for the next test ↗</span>
             </div>
-
-            <div className="anim-rise relative min-h-[520px] rounded-[28px] border border-white/12 bg-white/[.035] p-4 backdrop-blur-sm md:min-h-[610px] md:p-5" style={{ "--rise-y": "25px", "--rise-scale": ".97", "--rise-d": ".9s", "--rise-delay": ".2s" } as CSSProperties}>
-              <div className="flex items-center justify-between border-b border-white/10 pb-4 text-[11px] font-semibold uppercase tracking-[.15em] text-white/45"><span>Sprint / 01</span><span>One product · multiple directions</span></div>
-              <div className="relative mt-5 h-[445px] md:h-[520px]">
-                {[
-                  { top: "0%", left: "0%", rotate: -4, label: "HOOK 01 · 0:00", big: "STOP THE\nSCROLL.", accent: "bg-[#dfff3f] text-black" },
-                  { top: "25%", left: "18%", rotate: 3.5, label: "ANGLE 02 · 9:16", big: "NEW\nANGLE", accent: "bg-[#7c62ff] text-white" },
-                  { top: "50%", left: "4%", rotate: -1, label: "PRODUCT FIRST", big: "MAKE IT\nIMPOSSIBLE\nTO IGNORE.", accent: "bg-white text-black" },
-                ].map((card, i) => (
-                  <div key={card.label} style={{ top: card.top, left: card.left, "--card-rotate": `${card.rotate}deg`, "--float-amp": `${i % 2 ? 8 : -7}px`, "--float-d": `${5 + i}s` } as CSSProperties} className="anim-float absolute w-[78%] rounded-[22px] border border-white/14 bg-[#121212] p-4 shadow-[0_35px_80px_rgba(0,0,0,.45)] md:w-[74%] md:p-5">
-                    <div className="mb-8 flex items-center justify-between text-[10px] font-bold tracking-[.13em] text-white/42"><span>{card.label}</span><Play className="size-3.5" /></div>
-                    <div className="whitespace-pre-line text-[clamp(2rem,5vw,4.5rem)] font-black leading-[.83] tracking-[-.06em]">{card.big}</div>
-                    <div className={`mt-8 inline-flex rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] ${card.accent}`}>testing-ready</div>
-                  </div>
-                ))}
+            <div className="grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end lg:gap-8">
+              <div className="pb-0 lg:pb-10">
+                <div className="kicker mb-6 text-[#dfff3f]">Direct-response ecommerce creative</div>
+                <h1 className="hero-title max-w-[1000px]">The scroll<br />doesn’t <span className="hero-outline">wait.</span><span className="text-[#dfff3f]">✳</span></h1>
+                <p className="mt-7 max-w-[610px] text-base leading-[1.55] text-white/65 md:mt-10 md:text-xl">Your product deserves more than one shot at attention. We build product-first video ads, fresh hooks and new angles your team can put to the test.</p>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center md:mt-10">
+                  <ArrowButton href="#start" inverse>Start a creative sprint</ArrowButton>
+                  <a href="#work" className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full border border-white/20 px-5 py-3 text-sm font-semibold text-white/80 hover:border-white/60 hover:text-white">Explore concepts <ArrowDown className="size-4 transition-transform group-hover:translate-y-1" /></a>
+                </div>
+                <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/15 pt-5 text-[11px] font-semibold uppercase tracking-[.12em] text-white/42 md:mt-16"><span>Product-first</span><span>Multiple angles</span><span>Made for testing</span></div>
+              </div>
+              <div className="hero-art relative min-h-[450px] overflow-hidden rounded-[24px] border border-white/15 bg-[#1d1f1a] p-4 sm:min-h-[550px] md:p-6 lg:min-h-[630px]">
+                <div className="absolute inset-0 hero-art-grid" />
+                <div className="relative flex items-center justify-between text-[10px] font-bold uppercase tracking-[.15em] text-white/55"><span>ScrollSprint / Creative lab</span><span>01—03</span></div>
+                <div className="hero-art-frame absolute inset-x-[12%] top-[15%] bottom-[13%] rotate-[-7deg] overflow-hidden rounded-[20px] border border-white/30 bg-[#dfff3f] p-5 text-black shadow-[24px_32px_0_rgba(0,0,0,.25)] sm:p-8">
+                  <div className="flex items-center justify-between border-b border-black/25 pb-3 text-[10px] font-black uppercase tracking-[.14em]"><span>Concept / motion</span><span>9:16 ↗</span></div>
+                  <div className="absolute inset-x-0 top-[22%] flex justify-center"><div className="hero-orbit grid size-48 place-items-center rounded-full border-[20px] border-black/90 text-[100px] font-black leading-none tracking-[-.1em] sm:size-64 sm:border-[27px]">S</div></div>
+                  <div className="absolute bottom-6 left-5 right-5 sm:bottom-8 sm:left-8 sm:right-8"><div className="text-[clamp(2.5rem,6vw,5.5rem)] font-black uppercase leading-[.82] tracking-[-.09em]">Make<br />them<br />look.</div><div className="mt-5 flex justify-between border-t border-black/25 pt-3 text-[9px] font-black uppercase tracking-[.14em]"><span>Hook / Angle / Action</span><span>↗</span></div></div>
+                </div>
+                <div className="absolute bottom-5 right-5 rounded-full border border-white/20 bg-[#171816] px-4 py-2 text-[10px] font-bold uppercase tracking-[.1em] text-white/80 backdrop-blur">Creative testing, on repeat</div>
               </div>
             </div>
           </div>
@@ -180,7 +174,7 @@ export function ScrollSprintSite() {
                 [Gauge, "Testing velocity", "Finished variations, captions, sound and CTAs ready for the paid-social queue."],
               ].map(([Icon, title, copy], i) => {
                 const IconComponent = Icon as typeof Clapperboard;
-                return <div key={String(title)} className="min-h-[280px] border-b border-r border-black/10 p-6 md:p-7"><div className="flex items-center justify-between"><IconComponent className="size-5" /><span className="text-xs font-bold text-black/25">0{i + 1}</span></div><h3 className="mt-20 text-2xl font-semibold tracking-[-.04em]">{String(title)}</h3><p className="mt-3 text-sm leading-relaxed text-black/50">{String(copy)}</p></div>;
+                return <div key={String(title)} className="min-h-[220px] border-b border-r border-black/10 p-6 md:p-7"><div className="flex items-center justify-between"><IconComponent className="size-5" /><span className="text-xs font-bold text-black/25">0{i + 1}</span></div><h3 className="mt-12 md:mt-20 text-2xl font-semibold tracking-[-.04em]">{String(title)}</h3><p className="mt-3 text-sm leading-relaxed text-black/50">{String(copy)}</p></div>;
               })}
             </div>
           </div>
@@ -190,20 +184,18 @@ export function ScrollSprintSite() {
           <div className="mx-auto max-w-[1500px]">
             <div className="flex flex-col gap-8 border-b border-white/12 pb-12 md:flex-row md:items-end md:justify-between">
               <div><div className="kicker mb-6 text-[#dfff3f]">02 / Selected concepts</div><h2 className="section-title max-w-5xl">Built to make the product <span className="text-white/28">impossible to ignore.</span></h2></div>
-              <p className="max-w-sm text-sm leading-relaxed text-white/45">Portfolio videos are currently in production. Every unpaid example is clearly labeled concept/spec work.</p>
+              <p className="max-w-sm text-sm leading-relaxed text-white/45">Six self-initiated concepts. Videos will be added here as production finishes. The creative direction is ready to explore.</p>
             </div>
 
-            <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-12">
               {portfolio.map((item, i) => (
-                <Reveal key={item.title} delay={i * .04} className="group overflow-hidden rounded-[24px] border border-white/12 bg-white/[.035]">
-                  <div className="video-placeholder aspect-[9/11] p-5">
-                    <div className="relative z-10 flex h-full flex-col justify-between">
-                      <div className="flex items-center justify-between"><Pill dark>Concept Campaign</Pill><span className="text-[11px] font-bold tracking-[.12em] text-white/35">{item.tone} / 06</span></div>
-                      <div className="mx-auto flex size-24 items-center justify-center rounded-full border border-white/15 bg-black/25 backdrop-blur-lg transition-transform duration-500 group-hover:scale-105"><div className="text-center text-[10px] font-black uppercase leading-tight tracking-[.14em] text-white/60">Video<br />coming soon</div></div>
-                      <div><div className="mb-2 text-[10px] font-bold uppercase tracking-[.16em] text-[#dfff3f]">{item.type}</div><div className="text-sm text-white/45">{item.idea}</div></div>
-                    </div>
+                <Reveal key={item.title} delay={i * .04} className={`portfolio-card group overflow-hidden rounded-[22px] border border-white/15 bg-[#181a17] ${i < 2 ? "xl:col-span-6" : "xl:col-span-3"}`}>
+                  <div className={`video-placeholder portfolio-stage stage-${i + 1} relative flex flex-col justify-between overflow-hidden p-5 md:p-6 ${i < 2 ? "aspect-[4/4.2] sm:aspect-[4/3]" : "aspect-[4/4.2]"}`}>
+                    <div className="relative z-10 flex items-start justify-between gap-2"><Pill dark>Spec creative</Pill><span className="text-[11px] font-bold tracking-[.12em] text-white/55">{item.tone} / 06</span></div>
+                    <div aria-hidden="true" className="portfolio-glyph relative z-10 self-center text-[clamp(6rem,20vw,15rem)] font-black leading-none tracking-[-.14em] text-white/80">{["P", "A", "D", "F", "Z", "H"][i]}</div>
+                    <div className="relative z-10 flex items-end justify-between gap-2"><span className="rounded-full border border-white/25 bg-black/30 px-3 py-2 text-[10px] font-bold uppercase tracking-[.12em] backdrop-blur">Video coming soon</span><MoveUpRight className="size-5 text-white/65" /></div>
                   </div>
-                  <div className="p-5"><div className="text-[11px] font-bold uppercase tracking-[.14em] text-white/35">{item.name}</div><h3 className="mt-2 text-[clamp(1.45rem,3vw,2rem)] font-semibold leading-[1.02] tracking-[-.045em]">{item.title}</h3></div>
+                  <div className="flex min-h-36 flex-col justify-between p-5 md:p-6"><div className="flex items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[.14em] text-white/45"><span>{item.name} / {item.type}</span><span>Concept</span></div><div><h3 className="mt-5 text-[clamp(1.45rem,2.5vw,2rem)] font-semibold leading-[1.02] tracking-[-.045em]">{item.title}</h3><p className="mt-2 text-xs text-white/45">{item.idea}</p></div></div>
                 </Reveal>
               ))}
             </div>
@@ -223,16 +215,16 @@ export function ScrollSprintSite() {
                 ["02", "Map the angles", "We identify the strongest hooks, pain points and concepts."],
                 ["03", "Build the sprint", "Production, editing, voiceover, captions and variations."],
                 ["04", "Test + learn", "Your team tests. The learnings shape the next creative batch."],
-              ].map(([n, title, copy]) => <div key={n} className="min-h-[310px] bg-[#f4f2ea] p-7"><div className="text-xs font-black text-black/25">{n}</div><div className="mt-24 text-2xl font-semibold tracking-[-.04em]">{title}</div><p className="mt-3 text-sm leading-relaxed text-black/50">{copy}</p></div>)}
+              ].map(([n, title, copy]) => <div key={n} className="min-h-[220px] md:min-h-[310px] bg-[#f4f2ea] p-7"><div className="text-xs font-black text-black/25">{n}</div><div className="mt-12 md:mt-24 text-2xl font-semibold tracking-[-.04em]">{title}</div><p className="mt-3 text-sm leading-relaxed text-black/50">{copy}</p></div>)}
             </div>
           </div>
         </section>
 
         <section id="pricing" className="bg-[#c8bfff] px-4 py-24 md:px-7 md:py-32">
           <div className="mx-auto max-w-[1500px]">
-            <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end"><div><div className="kicker mb-6 text-black/55">04 / Packages</div><h2 className="section-title max-w-5xl">Start with one sprint.<br /><span className="text-black/35">Scale what earns another test.</span></h2></div><div className="max-w-sm text-sm leading-relaxed text-black/55">No fake guarantees. No bloated retainers before we have learned anything. Start with a defined batch.</div></div>
+            <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end"><div><div className="kicker mb-6 text-black/55">04 / Packages</div><h2 className="section-title max-w-5xl">Start with one sprint.<br /><span className="text-black/35">Scale what earns another test.</span></h2></div><div className="max-w-sm text-sm leading-relaxed text-black/55">Choose a defined batch. Each package includes finished creative and opening variations for your team to test.</div></div>
             <div className="mt-16 grid gap-4 lg:grid-cols-3">
-              {pricing.map((pack) => <div key={pack.name} className={`relative flex min-h-[590px] flex-col rounded-[24px] border p-6 md:p-7 ${pack.featured ? "border-black bg-black text-white shadow-[0_30px_80px_rgba(0,0,0,.18)]" : "border-black/15 bg-[#f4f2ea]/65"}`}>
+              {pricing.map((pack) => <div key={pack.name} className={`relative flex min-h-[500px] lg:min-h-[590px] flex-col rounded-[24px] border p-6 md:p-7 ${pack.featured ? "border-black bg-black text-white shadow-[0_30px_80px_rgba(0,0,0,.18)]" : "border-black/15 bg-[#f4f2ea]/65"}`}>
                 {pack.featured && <span className="absolute right-5 top-5 rounded-full bg-[#dfff3f] px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] text-black">Primary offer</span>}
                 <div className={`text-[11px] font-bold uppercase tracking-[.14em] ${pack.featured ? "text-white/40" : "text-black/40"}`}>{pack.name}</div>
                 <div className="mt-7 text-6xl font-semibold tracking-[-.06em]">{pack.price}</div>
@@ -258,11 +250,12 @@ export function ScrollSprintSite() {
         <section id="start" className="bg-[#dfff3f] px-4 py-24 md:px-7 md:py-32">
           <div className="mx-auto max-w-[1500px]">
             <div className="grid gap-14 lg:grid-cols-[1fr_.72fr]">
-              <div><div className="kicker mb-7 text-black/55">06 / Start</div><h2 className="section-title max-w-5xl">Give us one product.<br /><span className="text-black/38">We’ll give you more ways to sell it.</span></h2><p className="mt-7 max-w-2xl text-lg leading-relaxed text-black/60">Start with the essentials. Build a clean sprint brief in under a minute, then send it through the contact channel where we connected.</p></div>
+              <div><div className="kicker mb-7 text-black/55">06 / Start</div><h2 className="section-title max-w-5xl">Give us one product.<br /><span className="text-black/38">We’ll give you more ways to sell it.</span></h2><p className="mt-7 max-w-2xl text-lg leading-relaxed text-black/60">Tell us what you sell and what you want to test. Copy the brief, then send it through the channel where we connected.</p></div>
               <div className="rounded-[26px] border border-black/15 bg-[#f4f2ea] p-5 shadow-[0_35px_90px_rgba(0,0,0,.12)] md:p-7">
-                <div className="mb-6 flex items-center justify-between"><div><div className="text-lg font-semibold tracking-[-.03em]">Creative Sprint Brief</div><div className="mt-1 text-xs text-black/45">Two fields. One useful starting point.</div></div><Zap className="size-5" /></div>
+                <div className="mb-6 flex items-center justify-between"><div><div className="text-lg font-semibold tracking-[-.03em]">Creative Sprint Brief</div><div className="mt-1 text-xs text-black/45">Your starting point for a focused creative batch.</div></div><Zap className="size-5" /></div>
                 <label className="block text-xs font-bold uppercase tracking-[.12em] text-black/45">Product URL<input value={productUrl} onChange={(e) => setProductUrl(e.target.value)} placeholder="https://yourstore.com/product" className="mt-2 w-full rounded-[14px] border border-black/12 bg-white/70 px-4 py-3.5 text-sm font-medium tracking-normal outline-none transition focus:border-black/35" /></label>
                 <label className="mt-4 block text-xs font-bold uppercase tracking-[.12em] text-black/45">What should the creative sell or test?<textarea value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="e.g. Lead with the mess problem, demonstrate the product, then test 3 opening hooks." rows={4} className="mt-2 w-full resize-none rounded-[14px] border border-black/12 bg-white/70 px-4 py-3.5 text-sm font-medium leading-relaxed tracking-normal outline-none transition focus:border-black/35" /></label>
+                <p className="mt-4 text-xs leading-relaxed text-black/55">This brief stays on your device until you copy and send it.</p>
                 <button onClick={copyBrief} className="group mt-5 flex w-full items-center justify-between rounded-full bg-black px-5 py-4 text-sm font-semibold text-white transition hover:bg-[#7c62ff]"><span>{copied ? "Brief copied" : "Copy sprint brief"}</span>{copied ? <Check className="size-4" /> : <Copy className="size-4" />}</button>
               </div>
             </div>
