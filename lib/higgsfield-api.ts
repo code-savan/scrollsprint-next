@@ -85,6 +85,101 @@ export async function verifyHiggsfieldAuthentication() {
   };
 }
 
+type DerivedTokenPrice = {
+  usd: number;
+  videoTokens: number;
+  width: number;
+  height: number;
+  fps: number;
+  ratePerThousandTokens: number;
+  outputs: number;
+};
+
+function roundUpToMultiple(value: number, multiple: number) {
+  return Math.ceil(value / multiple) * multiple;
+}
+
+function deriveTokenMeteredUsd(
+  estimate: HiggsfieldEstimateResponse,
+  input: Record<string, unknown>,
+): DerivedTokenPrice | null {
+  const description =
+    typeof estimate.pricing_description === "string"
+      ? estimate.pricing_description
+      : "";
+
+  if (
+    !description.includes("Billable video tokens") ||
+    !description.includes("Per 1,000 video tokens")
+  ) {
+    return null;
+  }
+
+  const duration = Number(input.duration);
+  const resolution = String(input.resolution ?? "").toLowerCase();
+  const aspectRatio = String(input.aspect_ratio ?? "");
+  const ratioMatch = aspectRatio.match(/^(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)$/);
+  const resolutionMatch = resolution.match(/^(\d+)p$/);
+
+  if (
+    !Number.isFinite(duration) ||
+    duration <= 0 ||
+    !ratioMatch ||
+    (!resolutionMatch && resolution !== "4k")
+  ) {
+    return null;
+  }
+
+  const ratioWidth = Number(ratioMatch[1]);
+  const ratioHeight = Number(ratioMatch[2]);
+  if (ratioWidth <= 0 || ratioHeight <= 0) return null;
+
+  const shortEdge =
+    resolution === "4k" ? 2160 : Number(resolutionMatch?.[1]);
+  if (!Number.isFinite(shortEdge) || shortEdge <= 0) return null;
+
+  const ratio = ratioWidth / ratioHeight;
+  const width =
+    ratio >= 1 ? roundUpToMultiple(shortEdge * ratio, 16) : shortEdge;
+  const height =
+    ratio >= 1 ? shortEdge : roundUpToMultiple(shortEdge / ratio, 16);
+
+  const fpsMatch = description.match(/(\d+(?:\.\d+)?)\s*fps/i);
+  const fps = Number(fpsMatch?.[1]);
+  if (!Number.isFinite(fps) || fps <= 0) return null;
+
+  const ratePattern =
+    resolution === "4k"
+      ? /4K\s+\$(\d+(?:\.\d+)?)/i
+      : /480p\/720p\/1080p\s+\$(\d+(?:\.\d+)?)/i;
+  const rateMatch = description.match(ratePattern);
+  const ratePerThousandTokens = Number(rateMatch?.[1]);
+  if (!Number.isFinite(ratePerThousandTokens) || ratePerThousandTokens <= 0) {
+    return null;
+  }
+
+  const requestedOutputs = Number(input.count ?? input.num_outputs ?? 1);
+  const outputs =
+    Number.isFinite(requestedOutputs) && requestedOutputs > 0
+      ? Math.ceil(requestedOutputs)
+      : 1;
+  const videoTokens =
+    Math.ceil((duration * width * height * fps) / 1024) * outputs;
+  const usd = Math.ceil(
+    ((videoTokens / 1000) * ratePerThousandTokens) * 1_000_000,
+  ) / 1_000_000;
+
+  return {
+    usd,
+    videoTokens,
+    width,
+    height,
+    fps,
+    ratePerThousandTokens,
+    outputs,
+  };
+}
+
 export async function estimateGeneration(
   endpoint: string,
   input: Record<string, unknown>,
@@ -109,7 +204,19 @@ export async function estimateGeneration(
     );
   }
 
-  return payload as HiggsfieldEstimateResponse;
+  const estimate = payload as HiggsfieldEstimateResponse;
+  const existingUsd = Number(estimate.usd);
+  if (Number.isFinite(existingUsd)) return estimate;
+
+  const derived = deriveTokenMeteredUsd(estimate, input);
+  if (!derived) return estimate;
+
+  return {
+    ...estimate,
+    usd: derived.usd,
+    usd_source: "derived_from_higgsfield_pricing_description",
+    pricing_calculation: derived,
+  } as HiggsfieldEstimateResponse;
 }
 
 export async function submitGeneration(
