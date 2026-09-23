@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { jsonLdSchemas } from "@/lib/structured-data";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://scrollsprint.online"),
@@ -25,7 +26,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body>{children}</body>
+      <body>
+        {jsonLdSchemas.map((schema) => (
+          <script
+            key={String(schema["@id"])}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+        {children}
+      </body>
     </html>
   );
 }

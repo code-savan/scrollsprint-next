@@ -1,0 +1,22 @@
+# ScrollSprint Creative
+
+> Product-first paid-social video creatives for ecommerce teams that need more hooks, more angles and less production drag.
+
+## Sections
+
+- [Services](https://scrollsprint.online/#services): Product demos, UGC-style concepts, hook variations, testing velocity.
+- [Work](https://scrollsprint.online/#work): Self-initiated concept campaigns (spec work, not client work).
+- [Process](https://scrollsprint.online/#process): Send the product, map the angles, build the sprint, test + learn.
+- [Pricing](https://scrollsprint.online/#pricing): Starter Test $397, Creative Sprint $897, Scale Pack $1,497, Monthly Creative Engine from $2,000/mo.
+- [FAQ](https://scrollsprint.online/#start): Guarantees, product shipping, media buying, platforms.
+- [Start a sprint](https://scrollsprint.online/#start): Two-field Creative Sprint Brief (product URL + goal).
+
+## Machine-readable topic files
+
+- [Overview](https://scrollsprint.online/llm-content/overview.md)
+- [Services](https://scrollsprint.online/llm-content/services.md)
+- [Work and concept campaigns](https://scrollsprint.online/llm-content/work.md)
+- [Process](https://scrollsprint.online/llm-content/process.md)
+- [Pricing](https://scrollsprint.online/llm-content/pricing.md)
+- [FAQ](https://scrollsprint.online/llm-content/faq.md)
+- [Start a sprint](https://scrollsprint.online/llm-content/start.md)
