@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 660" fill="none"><defs><linearGradient id="paper" x1="120" y1="100" x2="540" y2="600" gradientUnits="userSpaceOnUse"><stop stop-color="#F5F3E9"/><stop offset="1" stop-color="#C8CEBA"/></linearGradient><linearGradient id="bottle" x1="200" y1="240" x2="385" y2="410" gradientUnits="userSpaceOnUse"><stop stop-color="#F9F4DF"/><stop offset=".5" stop-color="#E5DFC5"/><stop offset="1" stop-color="#B6B69A"/></linearGradient><linearGradient id="orange" x1="230" y1="180" x2="390" y2="500" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9C66"/><stop offset="1" stop-color="#ED572C"/></linearGradient><filter id="shadow" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="14" stdDeviation="13" flood-color="#163A30" flood-opacity=".13"/></filter></defs>
+<!-- Folded photographic sweep and shadow -->
+<path d="M64 105 529 62 580 546 123 596Z" fill="#D9E1CC"/>
+<path d="m64 105 44 360c8 67 25 82 83 72l389-67v76l-457 50Z" fill="#BDCAA9"/>
+<path d="m109 475 442-66M115 505l441-70M134 543l432-79" stroke="#EDF0DE" stroke-width="2" opacity=".65"/>
+<path d="m171 484 52 101m21-115 47 106m23-119 48 109m23-122 49 110m19-123 52 111" stroke="#EDF0DE" stroke-width="2" opacity=".65"/>
+<!-- Sculptural orange ribbon -->
+<path d="M478 86c-83 27-42 114 11 152 51 37 52 99-1 121-79 33-170-9-219 55-31 40-7 97 49 112" stroke="#DF4529" stroke-width="53"/>
+<path d="M469 85c-83 27-42 114 11 152 51 37 52 99-1 121-79 33-170-9-219 55-31 40-7 97 49 112" stroke="url(#orange)" stroke-width="46"/>
+<!-- Botanical cutting -->
+<path d="M146 473c-2-113 31-175 91-219" stroke="#274537" stroke-width="5" stroke-linecap="round"/>
+<path d="M167 370c-57-4-84-38-81-83 40 8 73 32 81 83Zm19-39c1-49 30-78 73-82-5 40-29 68-73 82Zm-31 83c-45-5-69-31-67-63 34 5 57 25 67 63Z" fill="#59774F"/>
+<path d="m98 301 56 57m41-43 48-51m-143 98 43 40" stroke="#A3B78A" stroke-width="2"/>
+<!-- Hero bottle with a genuine pump silhouette -->
+<g transform="rotate(-12 316 351)" filter="url(#shadow)">
+<path d="M248 234c0-18 12-28 31-28h62c19 0 32 10 32 28v23c0 12 15 23 15 43v192c0 18-12 31-30 31h-95c-19 0-31-13-31-31V300c0-20 16-31 16-43Z" fill="url(#bottle)" stroke="#84917A" stroke-width="1.5"/>
+<path d="M263 226v-37c0-6 4-10 10-10h74c6 0 10 4 10 10v37" fill="#193B31"/>
+<path d="M285 179v-25h22v25m-27-31h96v16h-96c-10 0-10-16 0-16Z" fill="#23483A"/>
+<path d="M288 155h85m-101 39v25m9-25v25m9-25v25m9-25v25m9-25v25m9-25v25m9-25v25m9-25v25m9-25v25" stroke="#486456" stroke-width="2"/>
+<path d="M252 296h116v158H252Z" fill="#F56739"/>
+<path d="M267 316h85m-85 113h85" stroke="#193B31"/>
+<text x="265" y="347" fill="#193B31" font-family="Arial,sans-serif" font-weight="900" font-size="30" letter-spacing="-2">GOOD</text>
+<text x="265" y="377" fill="#193B31" font-family="Arial,sans-serif" font-weight="900" font-size="30" letter-spacing="-2">STUFF.</text>
+<text x="266" y="404" fill="#193B31" font-family="Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="2">DAILY BODY WASH</text>
+<text x="269" y="443" fill="#193B31" font-family="Arial,sans-serif" font-size="7" letter-spacing="1">STUDIO CONCEPT / 250 ML</text>
+<path d="M248 306v181c0 12 5 20 14 23" stroke="#FFFDF1" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+</g>
+<!-- Director's marks and hand-drawn attention strokes -->
+<path d="m219 127-16-29m-3 43-32-8m51-34 3-25m195 359 26 7m-22-21 23-10m-26 4 8-25" stroke="#173B30" stroke-width="3" stroke-linecap="round"/>
+<path d="M51 184c-14 59-2 94 24 126m-1-22 2 24-24-7" stroke="#173B30" stroke-width="2" stroke-linecap="round"/>
+<!-- Cut-out edit card -->
+<g transform="rotate(7 445 524)"><path d="M361 486h183v77H361Z" fill="#F7F3E9" stroke="#193B31" stroke-width="1.5"/><path d="M361 486h183v18H361Z" fill="#193B31"/><path d="m373 486 12 18m13-18 12 18m13-18 12 18m13-18 12 18m13-18 12 18m13-18 12 18" stroke="#D8DFC8" stroke-width="8"/><text x="375" y="528" fill="#193B31" font-family="Arial,sans-serif" font-size="9" font-weight="700" letter-spacing="1.5">ONE PRODUCT.</text><text x="375" y="548" fill="#193B31" font-family="Arial,sans-serif" font-size="16" font-weight="900" letter-spacing="-.6">MORE POSSIBILITIES.</text></g>
+</svg>
