@@ -13,6 +13,12 @@ export type HiggsfieldGenerationResponse = {
   [key: string]: unknown;
 };
 
+export type HiggsfieldEstimateResponse = {
+  credits?: string | number;
+  usd?: string | number;
+  [key: string]: unknown;
+};
+
 function getCredentials() {
   const combined = process.env.HF_CREDENTIALS?.trim();
   if (combined) return combined;
@@ -32,6 +38,10 @@ function authHeaders() {
     Authorization: `Key ${getCredentials()}`,
     "Content-Type": "application/json",
   };
+}
+
+function normalizeEndpoint(endpoint: string) {
+  return endpoint.trim().replace(/^\/+|\/+$/g, "");
 }
 
 export function hasHiggsfieldCredentials() {
@@ -75,12 +85,39 @@ export async function verifyHiggsfieldAuthentication() {
   };
 }
 
+export async function estimateGeneration(
+  endpoint: string,
+  input: Record<string, unknown>,
+) {
+  const normalizedEndpoint = normalizeEndpoint(endpoint);
+  if (!normalizedEndpoint) throw new Error("A Higgsfield model endpoint is required");
+
+  const response = await fetch(
+    `${HIGGSFIELD_API_BASE}/estimate/${normalizedEndpoint}`,
+    {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify(input),
+      cache: "no-store",
+    },
+  );
+
+  const payload = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new Error(
+      `Higgsfield estimate failed (${response.status}): ${JSON.stringify(payload)}`,
+    );
+  }
+
+  return payload as HiggsfieldEstimateResponse;
+}
+
 export async function submitGeneration(
   endpoint: string,
   input: Record<string, unknown>,
 ) {
   const client = getHiggsfieldClient();
-  const result = await client.subscribe(endpoint, {
+  const result = await client.subscribe(normalizeEndpoint(endpoint), {
     input,
     withPolling: false,
   });
