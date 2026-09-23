@@ -140,3 +140,41 @@ button, input, textarea { font: inherit; }
     transition-duration: .01ms !important;
   }
 }
+
+/* The campaign poster is a typographic preview, not a finished ad. */
+.hero-shell { min-height: min(920px, 100svh); }
+.hero-title {
+  font-size: clamp(4.5rem, 8.7vw, 10rem);
+  line-height: .81;
+  letter-spacing: -.09em;
+  font-weight: 800;
+}
+.hero-outline { color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,.9); }
+.hero-art-grid { background-image: linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px), linear-gradient(90deg,rgba(255,255,255,.055) 1px,transparent 1px); background-size: 36px 36px; }
+.hero-art-frame { transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+.hero-art:hover .hero-art-frame { transform: rotate(-3deg) translateY(-8px); }
+.hero-orbit { transform: rotate(15deg); }
+.portfolio-card { transition: transform .25s ease, border-color .25s ease; }
+.portfolio-card:hover { transform: translateY(-4px); border-color: rgba(223,255,63,.45); }
+.portfolio-stage::after { display: none; }
+.portfolio-stage::before { opacity: .7; }
+.portfolio-glyph { transform: rotate(-11deg); text-shadow: 12px 16px 0 rgba(0,0,0,.24); }
+.stage-1 { background: radial-gradient(circle at 65% 45%, #7a70dc, transparent 45%), #23233c; }
+.stage-2 { background: radial-gradient(circle at 25% 45%, #ff954e, transparent 47%), #452a24; }
+.stage-3 { background: radial-gradient(circle at 65% 45%, #b693d9, transparent 47%), #372640; }
+.stage-4 { background: radial-gradient(circle at 35% 45%, #82aa89, transparent 47%), #1c332f; }
+.stage-5 { background: radial-gradient(circle at 65% 45%, #c0aa6f, transparent 47%), #39342c; }
+.stage-6 { background: radial-gradient(circle at 35% 45%, #839bdc, transparent 47%), #202d45; }
+.skip-link { position: fixed; z-index: 1000; left: 1rem; top: -5rem; padding: .7rem 1rem; background: #dfff3f; color: #111; border-radius: .5rem; font-weight: 700; }
+.skip-link:focus { top: 1rem; }
+:focus-visible { outline: 2px solid #795aff; outline-offset: 3px; }
+section[id] { scroll-margin-top: 95px; }
+@media (max-width: 639px) {
+  .hero-shell { min-height: 0; }
+  .hero-title { font-size: clamp(3.95rem, 17vw, 6rem); }
+  .hero-art { min-height: 440px; }
+  .hero-orbit { width: 10rem; height: 10rem; border-width: 17px; font-size: 5.3rem; }
+  .section-title { font-size: clamp(2.65rem, 11.5vw, 4rem); }
+  .portfolio-glyph { font-size: 9rem; }
+}
+@media (prefers-reduced-motion: reduce) { .portfolio-card:hover, .hero-art:hover .hero-art-frame { transform: none; } }
