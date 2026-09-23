@@ -26,7 +26,7 @@ try {
     },
   );
 
-  const payload = result as Record<string, unknown>;
+  const payload = result as unknown as Record<string, unknown>;
   const status = typeof payload.status === "string" ? payload.status.toLowerCase() : undefined;
 
   if (status && ["failed", "canceled", "cancelled", "moderated"].includes(status)) {

@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { motion } from "motion/react";
+import { useMemo, useState, type CSSProperties } from "react";
 import {
   ArrowDown,
   ArrowRight,
@@ -19,6 +18,7 @@ import {
   Zap,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { Reveal } from "@/components/reveal";
 
 const portfolio = [
   { name: "PrePaw", title: "The Hair Has to Go Somewhere", type: "Pet grooming", idea: "Mess → capture → clean result", tone: "01" },
@@ -121,10 +121,10 @@ export function ScrollSprintSite() {
 
           <div className="relative mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[1.18fr_.82fr] lg:items-end">
             <div>
-              <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="kicker mb-8 text-[#dfff3f]">Direct-response creative for ecommerce</motion.div>
-              <motion.h1 initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .05 }} className="display max-w-[1150px]">
+              <div className="kicker anim-rise mb-8 text-[#dfff3f]" style={{ "--rise-y": "18px", "--rise-d": ".7s" } as CSSProperties}>Direct-response creative for ecommerce</div>
+              <h1 className="display anim-rise max-w-[1150px]" style={{ "--rise-y": "35px", "--rise-d": ".8s", "--rise-delay": ".05s" } as CSSProperties}>
                 More ads<br />to test. <span className="text-white/32">Less</span><br /><span className="text-white/32">production</span> drag.
-              </motion.h1>
+              </h1>
               <div className="mt-10 grid gap-7 border-t border-white/14 pt-7 md:grid-cols-[1fr_auto] md:items-end">
                 <p className="max-w-[680px] text-lg leading-relaxed text-white/62 md:text-xl">Product-first video creatives for ecommerce teams that need fresh hooks, new angles and testing variations—without waiting weeks for production.</p>
                 <div className="flex flex-wrap gap-3">
@@ -134,7 +134,7 @@ export function ScrollSprintSite() {
               </div>
             </div>
 
-            <motion.div initial={{ opacity: 0, scale: .97, y: 25 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: .9, delay: .2 }} className="relative min-h-[520px] rounded-[28px] border border-white/12 bg-white/[.035] p-4 backdrop-blur-sm md:min-h-[610px] md:p-5">
+            <div className="anim-rise relative min-h-[520px] rounded-[28px] border border-white/12 bg-white/[.035] p-4 backdrop-blur-sm md:min-h-[610px] md:p-5" style={{ "--rise-y": "25px", "--rise-scale": ".97", "--rise-d": ".9s", "--rise-delay": ".2s" } as CSSProperties}>
               <div className="flex items-center justify-between border-b border-white/10 pb-4 text-[11px] font-semibold uppercase tracking-[.15em] text-white/45"><span>Sprint / 01</span><span>One product · multiple directions</span></div>
               <div className="relative mt-5 h-[445px] md:h-[520px]">
                 {[
@@ -142,14 +142,14 @@ export function ScrollSprintSite() {
                   { top: "25%", left: "18%", rotate: 3.5, label: "ANGLE 02 · 9:16", big: "NEW\nANGLE", accent: "bg-[#7c62ff] text-white" },
                   { top: "50%", left: "4%", rotate: -1, label: "PRODUCT FIRST", big: "MAKE IT\nIMPOSSIBLE\nTO IGNORE.", accent: "bg-white text-black" },
                 ].map((card, i) => (
-                  <motion.div key={card.label} animate={{ y: [0, i % 2 ? 8 : -7, 0] }} transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }} style={{ top: card.top, left: card.left, rotate: card.rotate }} className="absolute w-[78%] rounded-[22px] border border-white/14 bg-[#121212] p-4 shadow-[0_35px_80px_rgba(0,0,0,.45)] md:w-[74%] md:p-5">
+                  <div key={card.label} style={{ top: card.top, left: card.left, "--card-rotate": `${card.rotate}deg`, "--float-amp": `${i % 2 ? 8 : -7}px`, "--float-d": `${5 + i}s` } as CSSProperties} className="anim-float absolute w-[78%] rounded-[22px] border border-white/14 bg-[#121212] p-4 shadow-[0_35px_80px_rgba(0,0,0,.45)] md:w-[74%] md:p-5">
                     <div className="mb-8 flex items-center justify-between text-[10px] font-bold tracking-[.13em] text-white/42"><span>{card.label}</span><Play className="size-3.5" /></div>
                     <div className="whitespace-pre-line text-[clamp(2rem,5vw,4.5rem)] font-black leading-[.83] tracking-[-.06em]">{card.big}</div>
                     <div className={`mt-8 inline-flex rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-[.12em] ${card.accent}`}>testing-ready</div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -195,7 +195,7 @@ export function ScrollSprintSite() {
 
             <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {portfolio.map((item, i) => (
-                <motion.article key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} transition={{ duration: .55, delay: i * .04 }} className="group overflow-hidden rounded-[24px] border border-white/12 bg-white/[.035]">
+                <Reveal key={item.title} delay={i * .04} className="group overflow-hidden rounded-[24px] border border-white/12 bg-white/[.035]">
                   <div className="video-placeholder aspect-[9/11] p-5">
                     <div className="relative z-10 flex h-full flex-col justify-between">
                       <div className="flex items-center justify-between"><Pill dark>Concept Campaign</Pill><span className="text-[11px] font-bold tracking-[.12em] text-white/35">{item.tone} / 06</span></div>
@@ -204,7 +204,7 @@ export function ScrollSprintSite() {
                     </div>
                   </div>
                   <div className="p-5"><div className="text-[11px] font-bold uppercase tracking-[.14em] text-white/35">{item.name}</div><h3 className="mt-2 text-[clamp(1.45rem,3vw,2rem)] font-semibold leading-[1.02] tracking-[-.045em]">{item.title}</h3></div>
-                </motion.article>
+                </Reveal>
               ))}
             </div>
             <div className="mt-7 border-t border-white/10 pt-5 text-[10px] font-semibold uppercase tracking-[.12em] text-white/30">All work shown above is self-initiated concept/spec work, not commissioned client work.</div>
