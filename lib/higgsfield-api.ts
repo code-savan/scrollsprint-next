@@ -52,6 +52,29 @@ export function getHiggsfieldClient() {
   });
 }
 
+export async function verifyHiggsfieldAuthentication() {
+  const response = await fetch(
+    `${HIGGSFIELD_API_BASE}/bytedance/seedance-2.0/text-to-video`,
+    {
+      method: "POST",
+      headers: authHeaders(),
+      body: JSON.stringify({}),
+      cache: "no-store",
+    },
+  );
+
+  // The payload is intentionally invalid because `prompt` is required.
+  // A 400/402/422-style response proves the request passed authentication
+  // without creating a billable generation. 401/403 means the key pair failed.
+  const authenticated = response.status !== 401 && response.status !== 403;
+
+  return {
+    authenticated,
+    upstreamStatus: response.status,
+    authFailure: response.status === 401 || response.status === 403,
+  };
+}
+
 export async function submitGeneration(
   endpoint: string,
   input: Record<string, unknown>,
