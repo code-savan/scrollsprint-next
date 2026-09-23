@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { ArrowUpRight, ArrowRight, ArrowDown, Check, ChevronDown, X, Menu, Plus, Copy, Download, Film, AudioLines, MousePointer2, Scissors, CheckCheck } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ArrowDown, Check, X, Menu, Plus, Copy, Download, Film, AudioLines, MousePointer2, Scissors, CheckCheck } from "lucide-react";
 import { Logo } from "@/components/logo";
 
 const concepts = [
@@ -55,8 +55,9 @@ export function ScrollSprintSite() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
+  useEffect(() => { if (briefReady) result.current?.focus(); }, [briefReady]);
   function choosePackage(name: string) { setSelectedPackage(name); setBriefReady(false); setCopyStatus(""); }
-  function prepareBrief(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setBriefReady(true); setCopyStatus(""); requestAnimationFrame(() => result.current?.focus()); }
+  function prepareBrief(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setBriefReady(true); setCopyStatus(""); }
   async function copyBrief() {
     try { await navigator.clipboard.writeText(brief); setCopyStatus("Copied. Paste it into our conversation to share your brief."); }
     catch { setCopyStatus("Copy is unavailable here. Select the brief below or download it."); }
