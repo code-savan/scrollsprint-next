@@ -237,9 +237,23 @@ export async function submitGeneration(
   return result as unknown as HiggsfieldGenerationResponse;
 }
 
-export async function getRequestStatus(requestId: string) {
+export async function getRequestStatus(requestId: string, statusUrl?: string) {
+  let url = `${HIGGSFIELD_API_BASE}/requests/${encodeURIComponent(requestId)}/status`;
+  if (statusUrl) {
+    const supplied = new URL(statusUrl);
+    if (
+      supplied.protocol !== "https:" ||
+      !["api.higgsfield.ai", "platform.higgsfield.ai"].includes(supplied.hostname) ||
+      supplied.pathname !== `/requests/${encodeURIComponent(requestId)}/status` ||
+      supplied.search ||
+      supplied.hash
+    ) {
+      throw new Error("Invalid Higgsfield status URL for this request");
+    }
+    url = supplied.toString();
+  }
   const response = await fetch(
-    `${HIGGSFIELD_API_BASE}/requests/${encodeURIComponent(requestId)}/status`,
+    url,
     {
       method: "GET",
       headers: authHeaders(),

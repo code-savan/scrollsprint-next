@@ -214,6 +214,7 @@ export function buildHiggsfieldMcpServer() {
         "Read the current state and outputs of an existing Higgsfield request. Use this after higgsfield_generate and poll with reasonable backoff until a terminal state is returned.",
       inputSchema: z.object({
         request_id: z.string().min(1),
+        status_url: z.string().url().optional(),
       }),
       annotations: {
         readOnlyHint: true,
@@ -222,9 +223,9 @@ export function buildHiggsfieldMcpServer() {
         openWorldHint: true,
       },
     },
-    async ({ request_id }) => {
+    async ({ request_id, status_url }) => {
       try {
-        const status = await getRequestStatus(request_id);
+        const status = await getRequestStatus(request_id, status_url);
         return textResult({ ok: true, request_id, status });
       } catch (error) {
         return textResult(
