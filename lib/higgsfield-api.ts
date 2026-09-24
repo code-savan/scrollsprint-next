@@ -74,15 +74,57 @@ export async function verifyHiggsfieldAuthentication() {
   );
 
   // The payload is intentionally invalid because `prompt` is required.
-  // A 400/402/422-style response proves the request passed authentication
-  // without creating a billable generation. 401/403 means the key pair failed.
-  const authenticated = response.status !== 401 && response.status !== 403;
+  // A 400/422 validation response proves the request passed authentication
+  // without creating a billable generation. 401 means the key pair failed;
+  // 403 may mean insufficient credits, and 5xx leaves authentication unknown.
+  // A provider 5xx does not prove the credentials work. Only an expected
+  // validation response to this deliberately empty payload does.
+  const authenticated = response.status === 400 || response.status === 422;
 
   return {
     authenticated,
     upstreamStatus: response.status,
-    authFailure: response.status === 401 || response.status === 403,
+    upstreamAvailable: response.status < 500,
+    authFailure: response.status === 401,
+    creditFailure: response.status === 403,
   };
+}
+
+export async function diagnoseHiggsfieldConnection() {
+  const requestId = "00000000-0000-0000-0000-000000000000";
+  const probes = await Promise.all(
+    ["api.higgsfield.ai", "platform.higgsfield.ai"].flatMap((host) =>
+      ["none", "invalid", "configured"].map(async (credential) => {
+        const headers = new Headers();
+        if (credential === "invalid") {
+          headers.set("Authorization", "Key invalid:invalid");
+        } else if (credential === "configured") {
+          headers.set("Authorization", authHeaders().Authorization);
+        }
+        try {
+          const response = await fetch(
+            `https://${host}/requests/${requestId}/status`,
+            { headers, cache: "no-store" },
+          );
+          const body = await response.text();
+          return {
+            host,
+            credential,
+            status: response.status,
+            correlationId: response.headers.get("x-correlation-id"),
+            response: body.slice(0, 200),
+          };
+        } catch (error) {
+          return {
+            host,
+            credential,
+            error: error instanceof Error ? error.message : String(error),
+          };
+        }
+      }),
+    ),
+  );
+  return probes;
 }
 
 type DerivedTokenPrice = {
