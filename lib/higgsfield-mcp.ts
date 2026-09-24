@@ -3,6 +3,7 @@ import * as z from "zod/v4";
 
 import {
   cancelRequest,
+  diagnoseHiggsfieldConnection,
   estimateGeneration,
   getRequestStatus,
   submitGeneration,
@@ -86,6 +87,23 @@ export function buildHiggsfieldMcpServer() {
         );
       }
     },
+  );
+
+  server.registerTool(
+    "higgsfield_diagnose",
+    {
+      title: "Diagnose Higgsfield PAYG API connection",
+      description:
+        "Read-only probes of both Higgsfield API hosts using a nonexistent request ID with no, invalid, and configured credentials. No media is generated or charged. Responses never include credentials.",
+      inputSchema: z.object({}),
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
+    },
+    async () => textResult({ probes: await diagnoseHiggsfieldConnection() }),
   );
 
   server.registerTool(
