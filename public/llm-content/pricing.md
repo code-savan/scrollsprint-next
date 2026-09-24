@@ -1,19 +1,12 @@
-# ScrollSprint Creative — Pricing
+# ScrollSprint Creative pricing
 
-Source: `components/scrollsprint-site.tsx` (pricing array, `#pricing` section) on https://scrollsprint.online/
+Source: the visible pricing section at https://scrollsprint.online/#pricing
 
-## Position
+All packages are one-time creative production projects for one product. Each final cut is vertical 9:16, up to 30 seconds. One bounded revision round is included. Media buying and ad spend are separate. A hook cut changes the opening on an approved original concept and is not another original concept.
 
-- Start with one sprint. Scale what earns another test.
-- No fake guarantees. No bloated retainers before anything has been learned.
+- Trial Ad: $99, one original concept, one final cut.
+- Test Sprint: $299, two original concepts plus one extra hook cut, three final cuts.
+- Growth Sprint: $699, three original concepts plus four extra hook cuts, seven final cuts.
+- Scale Batch: $1,499, five original concepts plus ten extra hook cuts, fifteen final cuts.
 
-## Packages
-
-- Starter Test — $397. A low-risk first test for one product and one core angle. 2 finished ads, 3 hook variations, 1 core angle, 9:16 delivery, captions + sound, 1 revision round.
-- Creative Sprint — $897 (primary offer). The core offer: enough finished creative to actually learn something. 5 finished ads, 10 hook variations, 2 creative angles, VO + captions + sound, testing-ready variations, 1 revision round, 72-hour target turnaround.
-- Scale Pack — $1,497. For brands already spending consistently and hungry for more test inventory. 10 finished creatives, 20 hooks / openings, 3 creative angles, UGC + product-led concepts, multiple CTAs, testing recommendations, priority production.
-- Monthly Creative Engine — from $2,000/mo. Scope defined after the first sprint based on volume and testing cadence.
-
-## Guarantee boundary
-
-- No specific ROAS, CPA or revenue outcomes are promised.
+The team confirms the brief, assets and delivery date after checkout. No specific ROAS, CPA or revenue outcome is guaranteed.
