@@ -9,10 +9,12 @@ import {
   verifyHiggsfieldAuthentication,
 } from "@/lib/higgsfield-api";
 
-const DEFAULT_HARD_CAP_USD = 2;
+// One 30-second 720p Seedance 2.5 job can exceed the previous $2 limit.
+// Keep a server ceiling as well as the caller's per-generation max_usd.
+const DEFAULT_HARD_CAP_USD = 15;
 
 function hardCapUsd() {
-  const configured = Number(process.env.SCROLLSPRINT_MCP_MAX_GENERATION_USD);
+  const configured = Number(process.env.SCROLLSPRINT_MCP_MAX_SINGLE_GENERATION_USD);
   return Number.isFinite(configured) && configured > 0
     ? configured
     : DEFAULT_HARD_CAP_USD;
@@ -128,7 +130,7 @@ export function buildHiggsfieldMcpServer() {
         max_usd: z
           .number()
           .positive()
-          .max(10)
+          .max(15)
           .default(1)
           .describe(
             "Maximum USD you authorize for this single generation. The server also enforces its own hard cap.",

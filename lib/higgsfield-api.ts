@@ -99,7 +99,7 @@ function roundUpToMultiple(value: number, multiple: number) {
   return Math.ceil(value / multiple) * multiple;
 }
 
-function deriveTokenMeteredUsd(
+export function deriveTokenMeteredUsd(
   estimate: HiggsfieldEstimateResponse,
   input: Record<string, unknown>,
 ): DerivedTokenPrice | null {
@@ -110,12 +110,17 @@ function deriveTokenMeteredUsd(
 
   if (
     !description.includes("Billable video tokens") ||
-    !description.includes("Per 1,000 video tokens")
+    !/(?:Per|each)\s+1,?000\s+video\s+tokens/i.test(description)
   ) {
     return null;
   }
 
   const duration = Number(input.duration);
+  // Referenced videos add input seconds to the billable total. Without their
+  // verified durations, refuse to derive a price rather than underestimating.
+  if (input.video_url || (Array.isArray(input.video_urls) && input.video_urls.length)) {
+    return null;
+  }
   const resolution = String(input.resolution ?? "").toLowerCase();
   const aspectRatio = String(input.aspect_ratio ?? "");
   const ratioMatch = aspectRatio.match(/^(\d+(?:\.\d+)?):(\d+(?:\.\d+)?)$/);
@@ -150,8 +155,8 @@ function deriveTokenMeteredUsd(
 
   const ratePattern =
     resolution === "4k"
-      ? /4K\s+\$(\d+(?:\.\d+)?)/i
-      : /480p\/720p\/1080p\s+\$(\d+(?:\.\d+)?)/i;
+      ? /4K[^$]{0,100}\$(\d+(?:\.\d+)?)/i
+      : /480p\s*(?:\/|or)\s*720p(?:\s*(?:\/|or)\s*1080p)?[^$]{0,100}\$(\d+(?:\.\d+)?)/i;
   const rateMatch = description.match(ratePattern);
   const ratePerThousandTokens = Number(rateMatch?.[1]);
   if (!Number.isFinite(ratePerThousandTokens) || ratePerThousandTokens <= 0) {
