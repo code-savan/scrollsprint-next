@@ -12,7 +12,7 @@ const concepts = [
 type Concept = typeof concepts[number];
 const packages = [
   { name: "Trial Ad", price: "$99", intro: "Try one angle with one finished ad.", ads: "1", hooks: "1", items: ["One original concept for one product", "Up to 30 seconds, vertical 9:16", "One revision round"], checkout: "https://whop.com/scrollsprint/checkout/plan_6OrvvrFEUnYa1" },
-  { name: "Test Sprint", price: "$299", intro: "Compare two stories and a fresh opening.", ads: "3", hooks: "1", items: ["Two original concepts for one product", "One additional hook cut", "Up to 30 seconds each, one revision round"], checkout: "https://whop.com/scrollsprint/test-sprint", featured: true },
+  { name: "Test Sprint", price: "$299", intro: "Compare two stories and a fresh opening.", ads: "3", hooks: "1", items: ["Two original concepts for one product", "One additional hook cut", "Up to 30 seconds each, one revision round"], checkout: "https://whop.com/scrollsprint/checkout/plan_ospIIPGODzxd1", featured: true },
   { name: "Growth Sprint", price: "$699", intro: "More angles to learn from in one batch.", ads: "7", hooks: "4", items: ["Three original concepts for one product", "Four additional hook cuts", "Up to 30 seconds each, one revision round"], checkout: "" },
   { name: "Scale Batch", price: "$1,499", intro: "A larger queue for ongoing tests.", ads: "15", hooks: "10", items: ["Five original concepts for one product", "Ten additional hook cuts", "Up to 30 seconds each, one revision round"], checkout: "" },
 ];
