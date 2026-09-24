@@ -1,18 +1,11 @@
-# ScrollSprint Creative — Work and Concept Campaigns
+# ScrollSprint Creative portfolio
 
-Source: `components/scrollsprint-site.tsx` (portfolio array, `#work` section) on https://scrollsprint.online/
+Source: the visible portfolio at https://scrollsprint.online/#work
 
-## Status
+All three finished videos are self-initiated spec ads, not commissioned client work or product endorsements.
 
-- Every piece shown is self-initiated concept/spec work, labeled Concept Campaign. None is commissioned client work.
-- Portfolio videos are currently in production.
-- Commissioned work will be identified as client work when it exists.
+1. TYMO Ring Plus, "The getting-ready race": two friends compete at a mirror, and the hair-straightening comb enters the challenge. Beauty challenge, 27 seconds.
+2. PrePaw, "The fur came back": a dog owner is frustrated by loose fur, opens a grooming vacuum delivery, and uses it with the dog. Pet care story, 27 seconds.
+3. One Pass, "Washed yesterday. Dusty today": a dusty car panel sets up a spray-and-wipe product demonstration. Car care demo, 15 seconds.
 
-## Concepts
-
-- PrePaw — "The Hair Has to Go Somewhere" — pet grooming — mess, capture, clean result.
-- Automotive — "One Panel. One Pass." — detailing — application into transformation.
-- Depology — "Your Skincare Routine Has a Night Shift" — skincare — routine, product, payoff.
-- Furbo — "The 2:17 PM Check-in" — pet tech — notification, reassurance, day.
-- ZeoFill — "Looks Clean. Smells Clean?" — home/pet — invisible problem into application.
-- Hyperice — "The Workout Ends. The Routine Doesn't." — recovery — use-case, interaction, lifestyle.
+The original earlier dog ad and third-party reference videos are not in this portfolio.

@@ -1,7 +1,5 @@
-# ScrollSprint Creative — Start a Sprint
+# Start a ScrollSprint project
 
-Source: `components/scrollsprint-site.tsx` (`#start` section, Creative Sprint Brief builder) on https://scrollsprint.online/
+Source: the visible pricing and brief sections at https://scrollsprint.online/
 
-- Prospects start with the essentials: build a sprint brief in under a minute, then send it through the contact channel where they connected.
-- The Creative Sprint Brief has two fields: the product URL, and what the creative should sell or test.
-- The brief template covers: product, primary goal / offer, current ads / assets (links), priority platform (Meta / TikTok / Shorts), and anything to avoid (claims, visuals, competitors).
+Choose a one-time package and pay through Whop, then prepare a short brief with your product URL, platform and goal. Share the brief through the channel where you connected. ScrollSprint confirms the creative direction, approved assets and delivery date before production.
