@@ -1,5 +1,5 @@
 # Start a ScrollSprint project
 
-Source: the visible pricing and brief sections at https://scrollsprint.online/
+Source: the visible pricing and contact sections at https://scrollsprint.online/
 
-The preferred first step is a short conversation about the product page or current ad. All four packages also link directly to a one-time Whop checkout. The optional brief can be copied or downloaded, with nothing sent automatically. ScrollSprint reviews the product, claims, assets, current ads and goals, then confirms the creative direction and delivery date before production.
+Answer a short sequence about your product, creative need and preferred sprint. Choose WhatsApp to open a prepared message, or choose email to send the request directly once email delivery is connected. Leave your name and phone number at the last step. The Scale Batch is quoted by request. ScrollSprint confirms scope and delivery date before production.

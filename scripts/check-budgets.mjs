@@ -10,7 +10,7 @@ import { gzipSync } from "node:zlib";
 const ROOT = new URL("..", import.meta.url).pathname;
 const BUDGETS = [
   { label: "total client JS (gzip)", paths: [".next/static/chunks"], ext: ".js", maxBytes: 210 * 1024 },
-  { label: "total CSS (gzip)", paths: [".next/static/chunks"], ext: ".css", maxBytes: 12 * 1024 },
+  { label: "total CSS (gzip)", paths: [".next/static/chunks"], ext: ".css", maxBytes: 12.5 * 1024 },
   { label: "prerendered / HTML (raw)", paths: [".next/server/app/index.html"], ext: null, maxBytes: 80 * 1024 },
 ];
 

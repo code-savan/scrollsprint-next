@@ -62,7 +62,7 @@ export const faqSchema = {
       name: "What counts as a finished ad?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Each ad has its own opening and payoff. Ads within a batch may share approved footage, production elements and a creative direction. Longer explainers run 60–90 seconds. One bounded revision round applies to the batch.",
+        text: "Each ad has its own opening and payoff. Ads within a batch may share approved footage and production elements. Longer explainers run 60–90 seconds. One bounded revision round applies to the batch. Scale Batch is quoted for 15–25 short ads and ten explainers.",
       },
     },
     {
@@ -90,7 +90,7 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Trial Ad",
         description:
-          "Three finished vertical ads for one product, each up to 30 seconds, with one batch revision round.",
+          "Three vertical ads up to 30 seconds each and one 60–90 second product explainer for one product, with one bounded revision round.",
         provider: { "@id": `${SITE_URL}/#organization` },
         offers: { "@type": "Offer", price: "99", priceCurrency: "USD" },
       },
@@ -102,7 +102,7 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Test Sprint",
         description:
-          "Five finished vertical ads up to 30 seconds each and one 60–90 second product explainer for one product, across two creative directions, with one batch revision round.",
+          "Six vertical ads up to 30 seconds each and three 60–90 second product explainers for one product, with one bounded revision round.",
         provider: { "@id": `${SITE_URL}/#organization` },
         offers: { "@type": "Offer", price: "299", priceCurrency: "USD" },
       },
@@ -114,7 +114,7 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Growth Sprint",
         description:
-          "Eight finished vertical ads up to 30 seconds each and two 60–90 second product explainers for one product, across four creative directions, with one batch revision round.",
+          "Ten vertical ads up to 30 seconds each and five 60–90 second product explainers for one product, with one bounded revision round.",
         provider: { "@id": `${SITE_URL}/#organization` },
         offers: { "@type": "Offer", price: "699", priceCurrency: "USD" },
       },
@@ -126,9 +126,8 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Scale Batch",
         description:
-          "Twelve finished vertical ads up to 30 seconds each and four 60–90 second product explainers for one product, across six creative directions, a testing sequence and one batch revision round.",
+          "Fifteen to twenty-five vertical ads up to 30 seconds each and ten 60–90 second product explainers for one product, by request and scoped quote.",
         provider: { "@id": `${SITE_URL}/#organization` },
-        offers: { "@type": "Offer", price: "1499", priceCurrency: "USD" },
       },
     },
   ],
