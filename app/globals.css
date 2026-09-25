@@ -240,6 +240,7 @@ h1 em { color:#cf542e; }
 .dialog-art video { display:block; width:min(100%,300px); max-height:70svh; aspect-ratio:9/16; object-fit:contain; border-radius:8px; background:#111; }
 .dialog-art>span { margin-top:12px; }
 .pricing-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+@media(min-width:601px) { .concept-card:last-child:nth-child(3n+1) { grid-column:2; } }
 .price-card { padding:24px; }
 .price-amount { font-size:clamp(35px,3.2vw,55px); }
 .price-stats { gap:6px; }

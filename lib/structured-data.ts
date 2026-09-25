@@ -54,15 +54,15 @@ export const faqSchema = {
       name: "Are the portfolio videos commissioned client work?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. These are self-initiated spec ads for creative demonstration. The product names shown do not imply a paid client relationship or brand endorsement.",
+        text: "No. We identify our self-initiated spec ads and the reference videos provided to us. Product names do not imply a paid client relationship or brand endorsement.",
       },
     },
     {
       "@type": "Question",
-      name: "What counts as a hook cut?",
+      name: "What counts as a finished ad?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "A hook cut changes the opening of an approved original ad. It uses the same core story and footage; it is not another original concept. All packages include one bounded revision round and vertical 9:16 delivery.",
+        text: "Each ad has its own opening and payoff. Ads within a batch may share approved footage, production elements and a creative direction. Longer explainers run 60–90 seconds. One bounded revision round applies to the batch.",
       },
     },
     {
@@ -90,7 +90,7 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Trial Ad",
         description:
-          "One original concept for one product, one finished vertical ad up to 30 seconds, and one revision round.",
+          "Three finished vertical ads for one product, each up to 30 seconds, with one batch revision round.",
         provider: { "@id": `${SITE_URL}/#organization` },
         offers: { "@type": "Offer", price: "99", priceCurrency: "USD" },
       },
@@ -102,7 +102,7 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Test Sprint",
         description:
-          "Two original concepts for one product and one extra hook cut, for three final vertical cuts up to 30 seconds each, with one revision round.",
+          "Five finished vertical ads up to 30 seconds each and one 60–90 second product explainer for one product, across two creative directions, with one batch revision round.",
         provider: { "@id": `${SITE_URL}/#organization` },
         offers: { "@type": "Offer", price: "299", priceCurrency: "USD" },
       },
@@ -114,7 +114,7 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Growth Sprint",
         description:
-          "Three original concepts for one product and four extra hook cuts, for seven final vertical cuts up to 30 seconds each, with one revision round.",
+          "Eight finished vertical ads up to 30 seconds each and two 60–90 second product explainers for one product, across four creative directions, with one batch revision round.",
         provider: { "@id": `${SITE_URL}/#organization` },
         offers: { "@type": "Offer", price: "699", priceCurrency: "USD" },
       },
@@ -126,7 +126,7 @@ export const servicesSchema = {
         "@type": "Service",
         name: "Scale Batch",
         description:
-          "Five original concepts for one product and ten extra hook cuts, for fifteen final vertical cuts up to 30 seconds each, with one revision round.",
+          "Twelve finished vertical ads up to 30 seconds each and four 60–90 second product explainers for one product, across six creative directions, a testing sequence and one batch revision round.",
         provider: { "@id": `${SITE_URL}/#organization` },
         offers: { "@type": "Offer", price: "1499", priceCurrency: "USD" },
       },

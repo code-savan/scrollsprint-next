@@ -2,11 +2,11 @@
 
 Source: the visible pricing section at https://scrollsprint.online/#pricing
 
-All packages are one-time creative production projects for one product. Each final cut is vertical 9:16, up to 30 seconds. One bounded revision round is included. Media buying and ad spend are separate. A hook cut changes the opening on an approved original concept and is not another original concept.
+Four one-time creative projects for one product. Each finished short ad has its own opening and payoff; approved assets and footage can be shared within a batch. Vertical 9:16, with one bounded revision round for the batch. Ad spend and campaign management are separate.
 
-- Trial Ad: $99, one original concept, one final cut.
-- Test Sprint: $299, two original concepts plus one extra hook cut, three final cuts.
-- Growth Sprint: $699, three original concepts plus four extra hook cuts, seven final cuts.
-- Scale Batch: $1,499, five original concepts plus ten extra hook cuts, fifteen final cuts.
+- Trial Ad: $99, three ads up to 30 seconds each.
+- Test Sprint: $299, five ads up to 30 seconds and one 60–90 second product explainer, across two creative directions.
+- Growth Sprint: $699, eight ads up to 30 seconds and two 60–90 second product explainers, across four directions.
+- Scale Batch: $1,499, twelve ads up to 30 seconds and four 60–90 second product explainers, across six directions, plus a testing sequence.
 
-The team confirms the brief, assets and delivery date after checkout. No specific ROAS, CPA or revenue outcome is guaranteed.
+Each package button goes directly to its Whop one-time checkout. Brief, approved assets and delivery date are confirmed after payment. No specific ROAS, CPA or revenue outcome is guaranteed.

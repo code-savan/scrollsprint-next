@@ -2,4 +2,4 @@
 
 Source: the visible pricing and brief sections at https://scrollsprint.online/
 
-Trial and Test can be purchased through Whop. For a larger batch, prepare a short brief with your product URL, platform and goal. Share the brief through the channel where you connected. ScrollSprint confirms the creative direction, approved assets and delivery date before production.
+All four packages link directly to a one-time Whop checkout. Prepare a short brief with your product URL, platform and goal, and share it through the channel where you connected. ScrollSprint confirms the creative direction, approved assets and delivery date before production.

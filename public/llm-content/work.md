@@ -1,11 +1,15 @@
-# ScrollSprint Creative portfolio
+# ScrollSprint Creative videos
 
-Source: the visible portfolio at https://scrollsprint.online/#work
+Source: the visible videos at https://scrollsprint.online/#work
 
-All three finished videos are self-initiated spec ads, not commissioned client work or product endorsements.
+Three self-initiated spec ads demonstrate ScrollSprint's work. Four supplied references demonstrate story formats and are explicitly labelled as references. Product names do not imply paid client relationships or brand endorsements.
 
-1. TYMO Ring Plus, "The getting-ready race": two friends compete at a mirror, and the hair-straightening comb enters the challenge. Beauty challenge, 27 seconds.
-2. PrePaw, "The fur came back": a dog owner is frustrated by loose fur, opens a grooming vacuum delivery, and uses it with the dog. Pet care story, 27 seconds.
-3. One Pass, "Washed yesterday. Dusty today": a dusty car panel sets up a spray-and-wipe product demonstration. Car care demo, 15 seconds.
+1. TYMO Ring Plus, "The getting-ready race": beauty challenge, 27 seconds, spec ad.
+2. Hair-styling tool, "The salon comparison": two salon chairs, styling and reveal, 34 seconds, supplied reference.
+3. PrePaw, "The fur came back": dog fur problem, grooming vacuum unboxing and use, 27 seconds, spec ad.
+4. Travel activity toy, "The flight distraction": a tense flight and a child's activity board, 40 seconds, supplied reference.
+5. Electric toothbrush, "The toothbrush investigation": an exaggerated bathroom cleanup comedy, 42 seconds, supplied reference.
+6. Hair care, "The barber pressure test": a grooming challenge and group reaction, 37 seconds, supplied reference.
+7. One Pass, "Washed yesterday. Dusty today": dusty car panel, spray-and-wipe demo, 15 seconds, spec ad.
 
-The original earlier dog ad and third-party reference videos are not in this portfolio.
+Each poster is loaded separately; the MP4 loads only after a viewer opens a video.
