@@ -54,8 +54,8 @@ function whatsappHref(message: string) {
 const whatsappReady = whatsappHref("hello") !== "#start";
 const adMessage = "Hi ScrollSprint, I'd like feedback on an ad for my product.";
 const packageMessage = (name: string) => `Hi ScrollSprint, I'm interested in the ${name} for my product. I'd like to check if it's a fit.`;
-// Activate direct checkout only after the fixed-price Whop descriptions match this scope.
-const checkoutsUpdated = false;
+// The three fixed-price Whop listings and checkout summaries match this scope.
+const checkoutsUpdated = true;
 
 function CTA({ href = "#start", children, light = false, className = "" }: { href?: string; children: React.ReactNode; light?: boolean; className?: string }) {
   return <a href={href} className={`ss-button ${light ? "ss-button-light" : "ss-button-dark"} ${className}`}><span>{children}</span><ArrowUpRight size={17} aria-hidden="true" /></a>;
