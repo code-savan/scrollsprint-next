@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, Check, Copy, MessageCircle, Mail } from "lucide-react";
+import {
+  ArrowLeft, ArrowRight, Compass, Copy, MessageCircle, Mail,
+  Sparkles, Leaf, Home, PawPrint, Shapes, Zap, Eye, Layers, Clock3,
+  FlaskConical, TrendingUp, Rocket, Send, LoaderCircle, CircleCheck,
+  CircleAlert, User, Phone, Link2, RotateCcw,
+} from "lucide-react";
 
 const categories = [
   { value: "Beauty & grooming", description: "Hair, skin, tools and everyday routines" },
@@ -18,6 +23,39 @@ const goals = [
 ];
 const packages = ["Trial Ad", "Test Sprint", "Growth Sprint", "Scale Batch", "Help me choose"];
 type Channel = "whatsapp" | "email" | "copy";
+
+const categoryIcons: Record<string, React.ReactNode> = {
+  "Beauty & grooming": <Sparkles size={18} aria-hidden="true" />,
+  "Wellness": <Leaf size={18} aria-hidden="true" />,
+  "Home & lifestyle": <Home size={18} aria-hidden="true" />,
+  "Pets": <PawPrint size={18} aria-hidden="true" />,
+  "Something else": <Shapes size={18} aria-hidden="true" />,
+};
+const goalIcons: Record<string, React.ReactNode> = {
+  "New hooks": <Zap size={18} aria-hidden="true" />,
+  "Clearer product demo": <Eye size={18} aria-hidden="true" />,
+  "Fresh variations": <Layers size={18} aria-hidden="true" />,
+  "Longer explanation": <Clock3 size={18} aria-hidden="true" />,
+};
+const packageIcons: Record<string, React.ReactNode> = {
+  "Trial Ad": <FlaskConical size={18} aria-hidden="true" />,
+  "Test Sprint": <Zap size={18} aria-hidden="true" />,
+  "Growth Sprint": <TrendingUp size={18} aria-hidden="true" />,
+  "Scale Batch": <Rocket size={18} aria-hidden="true" />,
+  "Help me choose": <Compass size={18} aria-hidden="true" />,
+};
+const routeIcons: Record<string, React.ReactNode> = {
+  "whatsapp": <MessageCircle size={18} aria-hidden="true" />,
+  "email": <Mail size={18} aria-hidden="true" />,
+  "copy": <Copy size={18} aria-hidden="true" />,
+};
+
+function choiceIcon(step: number, value: string) {
+  if (step === 0) return categoryIcons[value];
+  if (step === 1) return goalIcons[value];
+  if (step === 2) return packageIcons[value];
+  return routeIcons[value];
+}
 
 export function ContactFlow({ initialPackage, whatsappHref, whatsappReady }: {
   initialPackage: string;
@@ -113,36 +151,36 @@ export function ContactFlow({ initialPackage, whatsappHref, whatsappReady }: {
     ];
 
   return <div className="brief-panel contact-panel">
-    <div className="brief-panel-head"><span>FIND YOUR STARTING POINT</span><span>{done ? "ALL SET" : `${String(step + 1).padStart(2, "0")} / 05`}</span></div>
+    <div className="brief-panel-head"><span className="brief-panel-title"><Compass size={15} aria-hidden="true" />FIND YOUR STARTING POINT</span><span>{done ? "ALL SET" : `${String(step + 1).padStart(2, "0")} / 05`}</span></div>
     {done ? <div className="contact-done" role="status">
-      <span className="contact-done-icon"><Check size={22}/></span>
+      <span className="contact-done-icon"><CircleCheck size={24} aria-hidden="true" /></span>
       <h3>{channel === "email" ? "Your message is on its way." : channel === "whatsapp" ? "Finish in WhatsApp." : "Your summary is ready."}</h3>
       <p>{channel === "email" ? "We’ve received your request and will review your product and creative need." : channel === "whatsapp" ? "Press send in WhatsApp to start the conversation." : "Paste this into a conversation with us."}</p>
       {channel === "copy" && <textarea value={summary} readOnly rows={9} aria-label="Your creative summary"/>}
-      <button type="button" className="text-link" onClick={() => { setDone(false); setStep(0); setRequestId(""); }}>Start again <ArrowRight size={16}/></button>
+      <button type="button" className="contact-again" onClick={() => { setDone(false); setStep(0); setRequestId(""); }}><RotateCcw size={15} aria-hidden="true" /> Start again</button>
     </div> : <>
-      <div className="contact-progress" aria-label={`Step ${step + 1} of five`}><span style={{width:`${(step + 1) * 20}%`}}/></div>
+      <div className="contact-segments" role="presentation" aria-hidden="true">{steps.map((label, i) => <span key={label} className={i < step ? "is-done" : i === step ? "is-now" : ""} />)}</div>
       <div className="contact-stage" key={step}>
         <span className="contact-step-label">{steps[step]}</span>
         <h3>{["What do you sell?", "What should the next ad improve?", "How much creative room do you need?", "How should we continue?", "Who are we speaking with?"][step]}</h3>
         {step < 4 ? <div className="contact-choices">{choices.map(item => {
           const disabled = step === 3 && ((item.value === "whatsapp" && !whatsappReady) || (item.value === "email" && !emailReady));
           return <button type="button" key={item.value} className="contact-choice" onClick={() => choose(item.value)} disabled={disabled} aria-disabled={disabled}>
-            <span>{step === 3 && item.value === "whatsapp" && <MessageCircle size={17}/>}{step === 3 && item.value === "email" && <Mail size={17}/>}{step === 3 && item.value === "copy" && <Copy size={17}/>}{item.value}<small>{item.description}</small></span><ArrowRight size={17}/>
+            <span className="choice-icon" aria-hidden="true">{choiceIcon(step, item.value)}</span><span className="choice-text">{item.value}<small>{item.description}</small></span><ArrowRight size={17} aria-hidden="true" />
           </button>;
         })}</div> : <form className="contact-details" onSubmit={submit}>
           <p>{channel === "whatsapp" ? "We’ll open WhatsApp with your answers ready. You choose when to send." : channel === "email" ? "We’ll email your answers to ScrollSprint as soon as you submit." : "We’ll prepare a copy of your answers for you."}</p>
-          <label htmlFor="contact-name">Your name<input id="contact-name" autoComplete="name" value={name} onChange={event=>setName(event.target.value)} required maxLength={100} placeholder="Your name"/></label>
-          <label htmlFor="contact-phone">Phone number<input id="contact-phone" autoComplete="tel" type="tel" value={phone} onChange={event=>setPhone(event.target.value)} required minLength={7} maxLength={25} pattern="[+0-9 ()-]{7,25}" placeholder="+1 555 123 4567"/></label>
-          {channel === "email" && <label htmlFor="contact-email">Email for our reply<input id="contact-email" autoComplete="email" type="email" value={email} onChange={event=>setEmail(event.target.value)} required maxLength={254} placeholder="you@brand.com"/></label>}
-          <label htmlFor="contact-url">Product page <span>(optional)</span><input id="contact-url" type="url" value={productUrl} onChange={event=>setProductUrl(event.target.value)} maxLength={500} placeholder="https://yourstore.com/product"/></label>
+          <label htmlFor="contact-name">Your name<span className="field-wrap"><User size={16} aria-hidden="true" /><input id="contact-name" autoComplete="name" value={name} onChange={event=>setName(event.target.value)} required maxLength={100} placeholder="Your name"/></span></label>
+          <label htmlFor="contact-phone">Phone number<span className="field-wrap"><Phone size={16} aria-hidden="true" /><input id="contact-phone" autoComplete="tel" type="tel" value={phone} onChange={event=>setPhone(event.target.value)} required minLength={7} maxLength={25} pattern="[+0-9 ()-]{7,25}" placeholder="+1 555 123 4567"/></span></label>
+          {channel === "email" && <label htmlFor="contact-email">Email for our reply<span className="field-wrap"><Mail size={16} aria-hidden="true" /><input id="contact-email" autoComplete="email" type="email" value={email} onChange={event=>setEmail(event.target.value)} required maxLength={254} placeholder="you@brand.com"/></span></label>}
+          <label htmlFor="contact-url">Product page <span>(optional)</span><span className="field-wrap"><Link2 size={16} aria-hidden="true" /><input id="contact-url" type="url" value={productUrl} onChange={event=>setProductUrl(event.target.value)} maxLength={500} placeholder="https://yourstore.com/product"/></span></label>
           <label className="contact-honeypot" htmlFor="contact-website" aria-hidden="true">Leave this field empty<input id="contact-website" type="text" value={website} onChange={event=>setWebsite(event.target.value)} tabIndex={-1} autoComplete="off"/></label>
-          <button className="ss-button ss-button-dark" type="submit" disabled={sending}><span>{sending ? "Sending…" : channel === "email" ? "Send my request" : channel === "whatsapp" ? "Continue to WhatsApp" : "Copy my summary"}</span><ArrowRight size={17}/></button>
-          {status && <p className="contact-error" role="alert">{status}</p>}
+          <button className="ss-button ss-button-dark brief-submit" type="submit" disabled={sending}><span>{sending ? "Sending…" : channel === "email" ? "Send my request" : channel === "whatsapp" ? "Continue to WhatsApp" : "Copy my summary"}</span>{sending ? <LoaderCircle size={17} aria-hidden="true" className="spin" /> : channel === "whatsapp" ? <MessageCircle size={17} aria-hidden="true" /> : channel === "copy" ? <Copy size={17} aria-hidden="true" /> : <Send size={17} aria-hidden="true" />}</button>
+          {status && <p className="contact-error" role="alert"><CircleAlert size={15} aria-hidden="true" />{status}</p>}
           <small>{channel === "email" ? "Your contact details go to ScrollSprint. We use them to reply about your request." : "Nothing is sent until you choose to send it."}</small>
         </form>}
       </div>
-      {step > 0 && <button type="button" className="contact-back" onClick={() => { setStep(step - 1); setStatus(""); }}><ArrowLeft size={15}/> Back</button>}
+      {step > 0 && <button type="button" className="contact-back" onClick={() => { setStep(step - 1); setStatus(""); }}><ArrowLeft size={15} aria-hidden="true" /> Back</button>}
     </>}
   </div>;
 }

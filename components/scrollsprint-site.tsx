@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, ArrowRight, ArrowDown, Check, X, Menu, Plus, Film, AudioLines, MousePointer2, Scissors, CheckCheck } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ArrowDown, Check, X, Menu, Plus, Film, AudioLines, MousePointer2, Scissors, ChevronLeft, ChevronRight, Play, MessageCircle, Sparkles, BadgeCheck, ClipboardList, Package, ShieldCheck } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { ContactFlow } from "@/components/contact-flow";
+import { ConceptVideo } from "@/components/concept-video";
 
 const heroSlides = [
   { niche: "BEAUTY / CREATOR FRAME", headline: "next beauty story.", image: "/hero/beauty.webp", alt: "Beauty creator showing a hair styling brush in her room", description: "A familiar styling moment gives the product a natural role." },
@@ -57,8 +58,8 @@ const packageMessage = (name: string) => `Hi ScrollSprint, I'm interested in the
 // The three fixed-price Whop listings and checkout summaries match this scope.
 const checkoutsUpdated = true;
 
-function CTA({ href = "#start", children, light = false, className = "" }: { href?: string; children: React.ReactNode; light?: boolean; className?: string }) {
-  return <a href={href} className={`ss-button ${light ? "ss-button-light" : "ss-button-dark"} ${className}`}><span>{children}</span><ArrowUpRight size={17} aria-hidden="true" /></a>;
+function CTA({ href = "#start", children, light = false, className = "", icon }: { href?: string; children: React.ReactNode; light?: boolean; className?: string; icon?: React.ReactNode }) {
+  return <a href={href} className={`ss-button ${light ? "ss-button-light" : "ss-button-dark"} ${className}`}><span>{children}</span>{icon ?? <ArrowUpRight size={17} aria-hidden="true" />}</a>;
 }
 
 export function ScrollSprintSite() {
@@ -66,10 +67,15 @@ export function ScrollSprintSite() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [selectedConcept, setSelectedConcept] = useState<Concept | null>(null);
   const [selectedPackage, setSelectedPackage] = useState("Test Sprint");
-  const [videoNotice, setVideoNotice] = useState("");
   const dialog = useRef<HTMLDialogElement>(null);
-  const video = useRef<HTMLVideoElement>(null);
+  const slider = useRef<HTMLDivElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
+  const drag = useRef({ down: false, startX: 0, startScroll: 0, moved: false });
+  const [workIndex, setWorkIndex] = useState(0);
+  const [workProgress, setWorkProgress] = useState(0);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -80,15 +86,8 @@ export function ScrollSprintSite() {
   }, []);
 
   useEffect(() => {
-    if (!selectedConcept || !dialog.current || !video.current) return;
+    if (!selectedConcept || !dialog.current) return;
     if (!dialog.current.open) dialog.current.showModal();
-    const currentVideo = video.current;
-    setVideoNotice("");
-    currentVideo.muted = false;
-    currentVideo.play().catch(() => {
-      currentVideo.muted = true;
-      currentVideo.play().then(() => setVideoNotice("Playing muted. Use the player control for sound.")).catch(() => setVideoNotice("Press play to watch this ad."));
-    });
   }, [selectedConcept]);
   useEffect(() => {
     if (!menuOpen) return;
@@ -97,6 +96,61 @@ export function ScrollSprintSite() {
     return () => window.removeEventListener("keydown", onKey);
   }, [menuOpen]);
   function choosePackage(name: string) { setSelectedPackage(name); }
+  function workStep() {
+    const track = slider.current;
+    if (!track) return 320;
+    const card = track.querySelector<HTMLElement>(".video-slide");
+    return card ? card.offsetWidth + 28 : Math.max(280, track.clientWidth * 0.8);
+  }
+  function updateWorkState() {
+    const track = slider.current;
+    if (!track) return;
+    const max = track.scrollWidth - track.clientWidth;
+    const left = track.scrollLeft;
+    setCanPrev(left > 8);
+    setCanNext(left < max - 8);
+    setWorkProgress(max > 0 ? Math.min(1, Math.max(0, left / max)) : 0);
+    const step = workStep();
+    setWorkIndex(step > 0 ? Math.min(concepts.length - 1, Math.max(0, Math.round(left / step))) : 0);
+  }
+  function scrollWork(direction: 1 | -1) {
+    const track = slider.current;
+    if (!track) return;
+    track.scrollBy({ left: direction * Math.max(280, track.clientWidth * 0.8), behavior: "smooth" });
+  }
+  function goToWork(index: number) {
+    const track = slider.current;
+    if (!track) return;
+    track.scrollTo({ left: index * workStep(), behavior: "smooth" });
+  }
+  function onWorkPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if ((e.target as HTMLElement).closest("button, a, video, input, .custom-player-bar")) return;
+    const track = slider.current;
+    if (!track) return;
+    drag.current = { down: true, startX: e.clientX, startScroll: track.scrollLeft, moved: false };
+    setIsDragging(true);
+    track.setPointerCapture?.(e.pointerId);
+  }
+  function onWorkPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    if (!drag.current.down) return;
+    const track = slider.current;
+    if (!track) return;
+    const dx = e.clientX - drag.current.startX;
+    if (Math.abs(dx) > 6) drag.current.moved = true;
+    track.scrollLeft = drag.current.startScroll - dx;
+  }
+  function endWorkDrag(e: React.PointerEvent<HTMLDivElement>) {
+    if (!drag.current.down) return;
+    drag.current.down = false;
+    setIsDragging(false);
+    try { slider.current?.releasePointerCapture?.(e.pointerId); } catch { /* noop */ }
+  }
+  useEffect(() => {
+    updateWorkState();
+    window.addEventListener("resize", updateWorkState);
+    return () => window.removeEventListener("resize", updateWorkState);
+  }, []);
 
   return <div className="site-shell">
     <a href="#main" className="skip-link">Skip to content</a>
@@ -111,8 +165,8 @@ export function ScrollSprintSite() {
     <main id="main">
       <section id="top" className="hero-section">
         <div className="page-width hero-grid">
-          <div className="hero-copy"><div className="eyebrow"><span className="status-dot"/> Short-form ad creative for ecommerce brands</div><h1>More creative<br/>angles for your<br/><em key={activeSlide} className="hero-headline-swap">{heroSlides[activeSlide].headline}</em></h1><p>ScrollSprint turns what makes your product worth buying into short-form ads worth testing, with stronger hooks, clearer product demos, and fresh creative directions for Meta, TikTok, and YouTube Shorts.</p><div className="hero-actions"><CTA href={whatsappHref(adMessage)}>{whatsappReady ? "Send us your current ad on WhatsApp" : "Find your starting point"}</CTA><a href="#work" className="text-link">Watch the ads <ArrowDown size={16}/></a></div><p className="hero-support">Already running paid ads? Send us your product page or current ad and we’ll suggest where the next creative opportunity may be.</p><div className="hero-footnote"><span>Strategy through final cut</span><span>One-time projects from $99</span></div></div>
-          <div className="hero-visual creator-visual"><div className="art-caption"><span>THE CREATIVE POSSIBILITIES DEPT.</span><span>EST. 2026</span></div><div className="creator-stage">{heroSlides.map((slide, index) => <div key={slide.image} className={`creator-slide ${activeSlide === index ? "is-active" : ""}`} aria-hidden={activeSlide !== index}><img src={slide.image} width="720" height="1280" alt={activeSlide === index ? slide.alt : ""} fetchPriority={index === 0 ? "high" : undefined} loading={index === 0 ? "eager" : "lazy"}/></div>)}<span className="creator-frame-mark">VERTICAL CREATIVE / 9:16</span></div><div className="creator-caption"><div><span>{heroSlides[activeSlide].niche}</span><p>{heroSlides[activeSlide].description}</p></div><div className="creator-dots" aria-label="Choose a creator example">{heroSlides.map((slide,index)=><button key={slide.niche} type="button" onClick={()=>setActiveSlide(index)} className={index===activeSlide?"is-active":""} aria-label={`Show ${slide.niche.toLowerCase()}`} aria-current={index===activeSlide?"true":undefined}/>)}</div></div></div>
+          <div className="hero-copy"><div className="eyebrow"><span className="status-dot"/> Short-form ad creative for ecommerce brands</div><h1>More creative<br/>angles for your<br/><em key={activeSlide} className="hero-headline-swap">{heroSlides[activeSlide].headline}</em></h1><p>ScrollSprint turns what makes your product worth buying into short-form ads worth testing, with stronger hooks, clearer product demos, and fresh creative directions for Meta, TikTok, and YouTube Shorts.</p><div className="hero-actions"><CTA href={whatsappHref(adMessage)} icon={whatsappReady ? <MessageCircle size={17} aria-hidden="true" /> : <Sparkles size={17} aria-hidden="true" />}>{whatsappReady ? "Send us your current ad" : "Find your starting point"}</CTA><a href="#work" className="pill-action"><span className="pill-action-disc"><Play size={13} fill="currentColor" aria-hidden="true" /></span>Watch the ads</a></div><div className="hero-assurance"><BadgeCheck size={21} aria-hidden="true" /><div><p><strong>Already running paid ads?</strong> Send us your product page or current ad and we’ll suggest where the next creative opportunity may be.</p><ul><li><Check size={14} aria-hidden="true" />Strategy through final cut</li><li><Check size={14} aria-hidden="true" />One-time projects from $99</li></ul></div></div></div>
+          <div className="hero-visual creator-visual"><div className="creator-stage">{heroSlides.map((slide, index) => <div key={slide.image} className={`creator-slide ${activeSlide === index ? "is-active" : ""}`} aria-hidden={activeSlide !== index}><img src={slide.image} width="720" height="1280" alt={activeSlide === index ? slide.alt : ""} fetchPriority={index === 0 ? "high" : undefined} loading={index === 0 ? "eager" : "lazy"}/></div>)}</div></div>
         </div>
         <div className="page-width platform-line"><span>Made for the feed.<br/><strong>Built for your next test.</strong></span><div className="platform-marquee" aria-label="Creative for Meta, TikTok, YouTube, Instagram, Facebook, Pinterest and Snapchat"><div className="platform-track">{[0,1].map(copy=><div className="platform-set" key={copy} aria-hidden={copy===1}>{platforms.map(name=><span className="platform-logo" key={name}><img src={`/brands/${name}.svg`} alt={copy===0 ? name[0].toUpperCase()+name.slice(1) : ""} width="34" height="34"/></span>)}</div>)}</div></div><span className="platform-aside">SCROLL LESS.<br/>SEE MORE. <ArrowDown size={14}/></span></div>
       </section>
@@ -123,11 +177,55 @@ export function ScrollSprintSite() {
         <div className="page-width">
           <div className="section-topline"><span className="eyebrow">01 / The concept room</span><span className="tiny-note">A LITTLE PRODUCT OBSESSION GOES A LONG WAY.</span></div>
           <div className="section-heading"><h2>Different products.<br/><em>Distinct stories.</em></h2><p>One product can invite multiple testable stories: a problem-first hook, product demo, before-and-after moment, comedy, tension, UGC-style story, comparison, or visual payoff. These six videos explore different directions.</p></div>
-          <div className="concept-grid">
-            {concepts.map((item, i) => <article className="concept-card" key={item.brand}>
-              <button className={`concept-art tone-${item.color}`} onClick={() => setSelectedConcept(item)} aria-label={`Watch ${item.brand} ${item.kind}`}><div className="concept-art-top"><span>{item.kind.toUpperCase()} {String(i+1).padStart(2,"0")}</span><span>{item.category}</span></div><img src={`/posters/${item.video}.webp`} alt={`Scene from the ${item.brand} video`} width="720" height="1280" loading="lazy"/><div className="concept-art-bottom"><span><Film size={13}/> Watch video</span><span className="concept-open"><ArrowUpRight size={19}/></span></div></button>
-              <div className="concept-info"><span>{item.brand} · {item.kind}</span><h3><button onClick={() => setSelectedConcept(item)}>{item.title}</button></h3><p>{item.angle}</p></div>
-            </article>)}
+          <div className="work-slider-head">
+            <span className="work-slider-hint">Tap a video to watch it with its story.</span>
+            <div className="work-slider-meta">
+              <span className="work-slider-count" aria-live="polite">{String(workIndex + 1).padStart(2, "0")} / {String(concepts.length).padStart(2, "0")}</span>
+              <div className="work-slider-nav">
+                <button type="button" onClick={() => scrollWork(-1)} disabled={!canPrev} aria-label="Scroll videos left"><ChevronLeft size={19} /></button>
+                <button type="button" onClick={() => scrollWork(1)} disabled={!canNext} aria-label="Scroll videos right"><ChevronRight size={19} /></button>
+              </div>
+            </div>
+          </div>
+          <div className="video-slider-wrap">
+            <div
+              ref={slider}
+              className={`video-slider${isDragging ? " is-dragging" : ""}`}
+              role="region"
+              aria-roledescription="carousel"
+              aria-label="Concept videos — scroll horizontally"
+              tabIndex={0}
+              onScroll={updateWorkState}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowRight") { e.preventDefault(); scrollWork(1); }
+                if (e.key === "ArrowLeft") { e.preventDefault(); scrollWork(-1); }
+              }}
+              onPointerDown={onWorkPointerDown}
+              onPointerMove={onWorkPointerMove}
+              onPointerUp={endWorkDrag}
+              onPointerCancel={endWorkDrag}
+              onClickCapture={(e) => {
+                if (drag.current.moved) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  drag.current.moved = false;
+                }
+              }}
+            >
+              {concepts.map((item, i) => <article className="video-slide" key={item.video} role="group" aria-roledescription="slide" aria-label={`${i + 1} of ${concepts.length}: ${item.brand} ${item.title}`} data-active={i === workIndex}>
+                <button type="button" className="video-poster" onClick={() => setSelectedConcept(item)} aria-label={`Watch ${item.brand} — ${item.title}`}>
+                  <img src={`/posters/${item.video}.webp?v=2`} alt="" width="540" height="960" loading="lazy" />
+                  <span className="video-poster-play" aria-hidden="true"><Play size={24} fill="currentColor" /></span>
+                </button>
+                <div className="concept-info"><span>{item.brand} · {item.kind}</span><h3><button onClick={() => setSelectedConcept(item)}>{item.title}</button></h3><p>{item.angle}</p></div>
+              </article>)}
+            </div>
+          </div>
+          <div className="work-slider-foot">
+            <div className="work-slider-rail" aria-hidden="true"><span style={{ transform: `scaleX(${workProgress || 1 / concepts.length})` }} /></div>
+            <div className="work-slider-dots" role="tablist" aria-label="Choose a video">
+              {concepts.map((item, i) => <button key={item.video} type="button" role="tab" aria-selected={i === workIndex} aria-label={`Go to ${item.brand} ${item.title}`} className={i === workIndex ? "is-active" : ""} onClick={() => goToWork(i)} />)}
+            </div>
           </div>
           <div className="work-bottom"><p>Spec ads show our creative work. Supplied references show story formats we study. No paid client relationship or product endorsement is implied.</p><a className="text-link" href="#pricing">See project pricing <ArrowRight size={16}/></a></div>
         </div>
@@ -160,11 +258,11 @@ export function ScrollSprintSite() {
 
       <section className="section-space faq-section"><div className="page-width faq-grid"><div><span className="eyebrow">05 / Before we get rolling</span><h2>Good questions.<br/><em>Clear answers.</em></h2><p>The details, without the guesswork.</p></div><div className="faq-list">{questions.map(([q,a])=><details key={q}><summary><span>{q}</span><Plus size={20} aria-hidden="true"/></summary><p>{a}</p></details>)}</div></div></section>
 
-      <section id="start" className="start-section section-space"><div className="page-width start-grid"><div className="start-copy"><span className="eyebrow">06 / Your next good move</span><h2>Have a product that needs<br/><em>more ways to be tested?</em></h2><p>Choose a few answers, then tell us how you want to talk. We’ll suggest a sensible creative starting point for your next test.</p><div className="final-actions"><a href="#contact-panel" className="ss-button ss-button-dark"><span>Find your starting point</span><ArrowUpRight size={17}/></a><a href="#pricing" className="text-link">View packages <ArrowUpRight size={17}/></a></div><p className="final-reassurance">A focused conversation about the next creative test.</p><div className="brief-promise"><CheckCheck size={22}/><span>One-time project scope.<br/><strong>Clear direction before production.</strong></span></div></div><div id="contact-panel"><ContactFlow initialPackage={selectedPackage} whatsappHref={whatsappHref} whatsappReady={whatsappReady}/></div></div></section>
+      <section id="start" className="start-section section-space"><div className="page-width start-grid"><div className="start-copy"><span className="eyebrow">06 / Your next good move</span><h2>Have a product that needs<br/><em>more ways to be tested?</em></h2><p>Choose a few answers, then tell us how you want to talk. We’ll suggest a sensible creative starting point for your next test.</p><div className="final-actions"><a href="#contact-panel" className="ss-button ss-button-dark"><span>Find your starting point</span><ClipboardList size={17} aria-hidden="true" /></a><a href="#pricing" className="pill-action"><span className="pill-action-disc"><Package size={13} aria-hidden="true" /></span>View packages</a></div><div className="start-assurance"><ShieldCheck size={21} aria-hidden="true" /><div><p><strong>One-time project scope.</strong> Clear direction before production.</p><ul><li><Check size={14} aria-hidden="true" />Nothing is sent until you choose to send it</li><li><Check size={14} aria-hidden="true" />No ongoing commitment, just the next test</li></ul></div></div></div><div id="contact-panel"><ContactFlow initialPackage={selectedPackage} whatsappHref={whatsappHref} whatsappReady={whatsappReady}/></div></div></section>
     </main>
     <footer className="site-footer"><div className="page-width"><div className="footer-top"><Logo/><p>More ads to test.<br/><em>Less production drag.</em></p><a href="#top" className="back-top" aria-label="Back to top"><ArrowUpRight size={25}/></a></div><div className="footer-bottom"><span>© {new Date().getFullYear()} ScrollSprint Creative</span><nav aria-label="Footer navigation"><a href="#work">The work</a><a href="#pricing">Packages</a><a href="#start">Start a brief</a></nav><span>INDEPENDENT BY DESIGN.</span></div></div></footer>
-    <dialog ref={dialog} className="concept-dialog" onClose={()=>{video.current?.pause(); setSelectedConcept(null); setVideoNotice("");}} onClick={e=>{if(e.target===e.currentTarget)dialog.current?.close();}} aria-labelledby="concept-dialog-title">
-      {selectedConcept && <><button className="dialog-close" onClick={()=>dialog.current?.close()} aria-label="Close concept"><X size={21}/></button><div className={`dialog-art tone-${selectedConcept.color}`}><video ref={video} key={selectedConcept.video} controls playsInline preload="metadata" poster={`/posters/${selectedConcept.video}.webp?v=2`} src={`/videos/${selectedConcept.video}.mp4?v=2`} onError={()=>setVideoNotice("This video could not load. Please try again shortly.")} aria-label={`${selectedConcept.brand} video`} /><span><Film size={14}/> {selectedConcept.kind}</span>{videoNotice && <p className="video-notice" role="status">{videoNotice}</p>}</div><div className="dialog-copy"><span className="eyebrow">{selectedConcept.brand} / {selectedConcept.kind}</span><h2 id="concept-dialog-title">{selectedConcept.title}</h2><p className="concept-hook">“{selectedConcept.hook}”</p><ol>{selectedConcept.frames.map((frame,i)=><li key={frame}><span>0{i+1}</span>{frame}</li>)}</ol><div className="dialog-foot"><span>{selectedConcept.format}</span><span>{selectedConcept.kind === "Spec ad" ? "Self-initiated concept" : "Supplied creative reference"}</span></div></div></>}
+    <dialog ref={dialog} className="concept-dialog concept-dialog-story" onClose={()=>{setSelectedConcept(null);}} onClick={e=>{if(e.target===e.currentTarget)dialog.current?.close();}} aria-labelledby="concept-dialog-title">
+      {selectedConcept && <><button className="dialog-close" onClick={()=>dialog.current?.close()} aria-label="Close concept"><X size={21}/></button><div className={`dialog-art tone-${selectedConcept.color}`}><ConceptVideo key={selectedConcept.video} src={`/videos/${selectedConcept.video}.mp4?v=2`} poster={`/posters/${selectedConcept.video}.webp?v=2`} label={`${selectedConcept.brand} — ${selectedConcept.title}`} autoPlay /><span><Film size={14}/> {selectedConcept.kind}</span></div><div className="dialog-copy"><span className="eyebrow">{selectedConcept.brand} / {selectedConcept.kind}</span><h2 id="concept-dialog-title">{selectedConcept.title}</h2><p className="concept-hook">“{selectedConcept.hook}”</p><ol>{selectedConcept.frames.map((frame,i)=><li key={frame}><span>0{i+1}</span>{frame}</li>)}</ol><div className="dialog-foot"><span>{selectedConcept.format}</span><span>{selectedConcept.kind === "Spec ad" ? "Self-initiated concept" : "Supplied creative reference"}</span></div></div></>}
     </dialog>
   </div>;
 }

@@ -2,7 +2,9 @@
 // Run after `next build`: `node scripts/check-budgets.mjs`.
 // Fails (exit 1) if any client payload exceeds budget, so the next feature
 // PR cannot silently undo the optimization work. Thresholds set ~15-20%
-// above the 2026-09-23 post-optimization numbers.
+// above the 2026-09-23 post-optimization numbers; CSS raised to 13KB on
+// 2026-09-25 after the video slider, custom player, and contact icon system
+// landed (dead rules purged at the same time).
 import { readdirSync, statSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { gzipSync } from "node:zlib";
@@ -10,7 +12,7 @@ import { gzipSync } from "node:zlib";
 const ROOT = new URL("..", import.meta.url).pathname;
 const BUDGETS = [
   { label: "total client JS (gzip)", paths: [".next/static/chunks"], ext: ".js", maxBytes: 210 * 1024 },
-  { label: "total CSS (gzip)", paths: [".next/static/chunks"], ext: ".css", maxBytes: 12.5 * 1024 },
+  { label: "total CSS (gzip)", paths: [".next/static/chunks"], ext: ".css", maxBytes: 13 * 1024 },
   { label: "prerendered / HTML (raw)", paths: [".next/server/app/index.html"], ext: null, maxBytes: 80 * 1024 },
 ];
 
