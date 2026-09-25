@@ -15,7 +15,7 @@ export const organizationSchema = {
   url: SITE_URL,
   slogan: "More ads to test. Less production drag.",
   description:
-    "Product-first paid-social video creatives for ecommerce teams that need more hooks, more angles and less production drag.",
+    "Short-form ad creative for ecommerce brands already testing or running paid traffic, with stronger hooks, clearer product demos and fresh directions to test.",
 } as const;
 
 export const websiteSchema = {
@@ -70,7 +70,7 @@ export const faqSchema = {
       name: "What happens after payment?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "We collect your product link, claims and assets, agree on the creative direction and confirm the delivery date. The one-time package payment covers creative production; ad spend and media buying are separate.",
+        text: "We review your product page, claims, assets, current ads and goals, then confirm the creative direction and delivery date before production begins. The one-time payment covers creative production; ad spend and media buying are separate. There is no ongoing commitment.",
       },
     },
   ],

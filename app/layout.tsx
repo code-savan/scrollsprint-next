@@ -6,11 +6,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://scrollsprint.online"),
   title: "ScrollSprint Creative — More ads to test.",
   description:
-    "Product-first paid-social video creatives for ecommerce teams that need more hooks, more angles and less production drag.",
+    "Short-form ad creative for ecommerce brands running paid traffic. Stronger hooks, clearer product demos and fresh directions for Meta, TikTok and YouTube Shorts.",
   openGraph: {
     title: "ScrollSprint Creative — More ads to test.",
     description:
-      "Product-first paid-social video creatives for ecommerce teams that need more hooks, more angles and less production drag.",
+      "Short-form ad creative for ecommerce brands running paid traffic. Stronger hooks, clearer product demos and fresh directions for Meta, TikTok and YouTube Shorts.",
     url: "https://scrollsprint.online",
     siteName: "ScrollSprint Creative",
     type: "website"

@@ -2,4 +2,4 @@
 
 Source: the visible pricing and brief sections at https://scrollsprint.online/
 
-All four packages link directly to a one-time Whop checkout. Prepare a short brief with your product URL, platform and goal, and share it through the channel where you connected. ScrollSprint confirms the creative direction, approved assets and delivery date before production.
+The preferred first step is a short conversation about the product page or current ad. All four packages also link directly to a one-time Whop checkout. The optional brief can be copied or downloaded, with nothing sent automatically. ScrollSprint reviews the product, claims, assets, current ads and goals, then confirms the creative direction and delivery date before production.

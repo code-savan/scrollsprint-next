@@ -2,7 +2,7 @@
 
 Source: the visible videos at https://scrollsprint.online/#work
 
-Three self-initiated spec ads demonstrate ScrollSprint's work. Four supplied references demonstrate story formats and are explicitly labelled as references. Product names do not imply paid client relationships or brand endorsements.
+Three self-initiated spec ads demonstrate ScrollSprint's work. Four supplied references demonstrate story formats and are explicitly labelled as references. Together they show different testable stories, including problem-first hooks, demonstrations, before-and-after moments, comedy, tension, comparison and visual payoff. Product names do not imply paid client relationships or brand endorsements.
 
 1. TYMO Ring Plus, "The getting-ready race": beauty challenge, 27 seconds, spec ad.
 2. Hair-styling tool, "The salon comparison": two salon chairs, styling and reveal, 34 seconds, supplied reference.
